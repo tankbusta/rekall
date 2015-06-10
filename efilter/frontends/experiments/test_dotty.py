@@ -58,17 +58,17 @@ class TokenizerTest(unittest.TestCase):
         query = "1 in (5, 10) == ProcessPid"
         tokenizer = dotty.Tokenizer(query)
         tokenizer.next_token()
-        self.assertEquals(tokenizer.peek(2).name, "lparen")
-        self.assertEquals(tokenizer.current_token.value, 1)
-        self.assertEquals(tokenizer.peek(20), None)
-        self.assertEquals(tokenizer.current_token.value, 1)
-        self.assertEquals(tokenizer.next_token().value, "in")
-        self.assertEquals(tokenizer.current_token.value, "in")
-        self.assertEquals(tokenizer.next_token().name, "lparen")
-        self.assertEquals(tokenizer.next_token().value, 5)
-        self.assertEquals(tokenizer.peek().name, "comma")
-        self.assertEquals(tokenizer.next_token().name, "comma")
-        self.assertEquals(tokenizer.next_token().value, 10)
+        self.assertEqual(tokenizer.peek(2).name, "lparen")
+        self.assertEqual(tokenizer.current_token.value, 1)
+        self.assertEqual(tokenizer.peek(20), None)
+        self.assertEqual(tokenizer.current_token.value, 1)
+        self.assertEqual(tokenizer.next_token().value, "in")
+        self.assertEqual(tokenizer.current_token.value, "in")
+        self.assertEqual(tokenizer.next_token().name, "lparen")
+        self.assertEqual(tokenizer.next_token().value, 5)
+        self.assertEqual(tokenizer.peek().name, "comma")
+        self.assertEqual(tokenizer.next_token().name, "comma")
+        self.assertEqual(tokenizer.next_token().value, 10)
 
 
 class ParserTest(unittest.TestCase):

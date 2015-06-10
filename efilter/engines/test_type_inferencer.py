@@ -6,7 +6,7 @@ from efilter import query
 from efilter.protocols import boolean
 from efilter.protocols import number
 from efilter.protocols import name_delegate
-
+from efilter.compat import basestring
 
 class FakeApplicationDelegate(object):
     NAMES = {

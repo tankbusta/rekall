@@ -436,7 +436,7 @@ class Parser(frontend.Frontend):
         try:
             return operator.handler(*args, **kwargs)
         except ValueError as e:
-            return self.error(e.message,
+            return self.error(str(e),
                               start_token=args[0])
 
     def _replace_param(self, token):

@@ -28,7 +28,7 @@ from efilter.protocols import eq
 from efilter.protocols import iset
 from efilter.protocols import ordered
 from efilter.protocols import number
-
+from efilter.compat import basestring
 
 class Expression(object):
     """Base class of the query AST.
@@ -185,7 +185,7 @@ class Membership(BinaryExpression):
 
 
 class RegexFilter(BinaryExpression):
-    type_signature = (basestring, basestring)
+    type_signature = (basestring, )
     return_signature = boolean.IBoolean
 
     @property

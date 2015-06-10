@@ -34,5 +34,5 @@ IBovine.implement(for_type=Kyr,
 class TypesTest(unittest.TestCase):
     def testProtocol(self):
         self.assertTrue(isinstance(Kyr(), IBovine))
-        self.assertEquals(say_moo(Kyr()), "Muu")
+        self.assertEqual(say_moo(Kyr()), "Muu")
         self.assertEqual(graze(Kyr()), "Om nom nom.")

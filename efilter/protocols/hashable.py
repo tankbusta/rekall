@@ -23,6 +23,7 @@ import numbers
 
 from efilter import dispatch
 from efilter import protocol
+from efilter.compat import basestring
 
 # Declarations:
 # pylint: disable=unused-argument
@@ -39,6 +40,6 @@ class IHashable(protocol.Protocol):
 
 # Default implementations:
 
-IHashable.implement(for_types=(basestring, numbers.Number, type(None),
+IHashable.implement(for_types=(str, basestring, numbers.Number, type(None),
                                tuple, frozenset, datetime.datetime),
                     implementations={hashed: hash})

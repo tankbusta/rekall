@@ -24,6 +24,7 @@ __author__ = "Adam Sindelar <adamsh@google.com>"
 from efilter import frontend
 from efilter import engine
 from efilter import expression
+from efilter.compat import basestring
 
 
 class Query(object):

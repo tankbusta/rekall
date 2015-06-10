@@ -21,19 +21,17 @@ This module implements a set-like container that supports multiple hashable
 elems per entry.
 """
 
-
 __author__ = "Adam Sindelar <adamsh@google.com>"
 
-
 from efilter.protocols import indexable
-
+from efilter.compat import itervalues
 
 class IndexSet(object):
     _backing_dict = None
     _elem_count = None
 
     def __init__(self, elems=()):
-        self._backing_dict = dict()
+        self._backing_dict = {}
         self._elem_count = 0
         for elem in elems:
             self.add(elem)
@@ -79,7 +77,7 @@ class IndexSet(object):
 
     def pop(self):
         popped_elem = None
-        for elem in self._backing_dict.itervalues():
+        for elem in itervalues(self._backing_dict):
             popped_elem = elem
             break
 
@@ -124,7 +122,7 @@ class IndexSet(object):
         return self
 
     def union(self, other):
-        result = type(self)(self._backing_dict.itervalues())
+        result = type(self)(itervalues(self._backing_dict))
         for elem in other:
             if elem in result:
                 continue
@@ -177,7 +175,7 @@ class IndexSet(object):
     def __iter__(self):
         seen = set()
 
-        for elem in self._backing_dict.itervalues():
+        for elem in itervalues(self._backing_dict):
             indices = set(indexable.indices(elem))
             if seen & indices:
                 continue

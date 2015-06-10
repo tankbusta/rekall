@@ -40,6 +40,8 @@ protocols it requires on its children and guarantees on its return type.
 
 __author__ = "Adam Sindelar <adamsh@google.com>"
 
+from efilter.compat import BUILTIN_TYPES, iteritems, with_metaclass
+
 import abc
 
 
@@ -63,8 +65,7 @@ class AnyType(object):
     """
 
 
-BUILTIN_TYPES = (int, float, long, complex, basestring, tuple, list, dict, set,
-                 frozenset, type(None), AnyType)
+BUILTIN_TYPES = BUILTIN_TYPES + (type(AnyType), )
 
 
 def implements(obj, protocol):
@@ -82,9 +83,8 @@ def isa(cls, protocol):
     return issubclass(cls, protocol) or issubclass(AnyType, protocol)
 
 
-class Protocol(object):
+class Protocol(with_metaclass(abc.ABCMeta)):
     """Collection of related functions that operate on a type (interface)."""
-    __metaclass__ = abc.ABCMeta
 
     _protocol_functions = set()
 
@@ -118,7 +118,7 @@ class Protocol(object):
         protocol_functions = cls.functions()
         remaining = set(protocol_functions)
 
-        for func, impl in implementations.iteritems():
+        for func, impl in iteritems(implementations):
             if func not in protocol_functions:
                 func_name = getattr(func, "func_name", repr(func))
                 raise TypeError("Function %s is not part of the protocol %r." %

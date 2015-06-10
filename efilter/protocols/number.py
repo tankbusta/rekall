@@ -20,7 +20,9 @@
 
 from efilter import dispatch
 from efilter import protocol
+from efilter.compat import NUMERIC_TYPES
 
+FOR_TYPES = NUMERIC_TYPES + (complex, )
 
 # Declarations:
 # pylint: disable=unused-argument
@@ -53,7 +55,7 @@ class INumber(protocol.Protocol):
 # Default implementations:
 
 INumber.implement(
-    for_types=(int, float, complex, long),
+    for_types=FOR_TYPES,
     implementations={
         sum: lambda x, y: x + y,
         product: lambda x, y: x * y,

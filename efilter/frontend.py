@@ -20,13 +20,13 @@ EFILTER frontend base class.
 
 __author__ = "Adam Sindelar <adamsh@google.com>"
 
+from efilter.compat import with_metaclass
 
 import abc
 
 
-class Frontend(object):
+class Frontend(with_metaclass(abc.ABCMeta)):
     """Base class representing parsers or generators of the EFILTER AST."""
-    __metaclass__ = abc.ABCMeta
 
     FRONTENDS = {}
 

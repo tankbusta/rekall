@@ -24,6 +24,7 @@ __author__ = "Adam Sindelar <adamsh@google.com>"
 import abc
 
 from efilter.protocols import name_delegate
+from efilter.compat import with_metaclass
 
 
 class NopAppDelegate(object):
@@ -40,9 +41,8 @@ name_delegate.INameDelegate.implement(
 )
 
 
-class Engine(object):
+class Engine(with_metaclass(abc.ABCMeta)):
     """Base class representing the various behaviors of the EFILTER AST."""
-    __metaclass__ = abc.ABCMeta
 
     ENGINES = {}
 

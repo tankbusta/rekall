@@ -22,6 +22,7 @@ from efilter import dispatch
 from efilter import protocol
 
 from efilter.protocols import counted
+from efilter.compat import xrange
 
 # Declarations:
 # pylint: disable=unused-argument

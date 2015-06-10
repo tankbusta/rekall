@@ -1,8 +1,15 @@
 import unittest
+import sys
 
 from efilter.protocols import hashable
 from efilter.protocols import superposition
+from efilter.compat import basestring
 
+PY3 = sys.version_info[0] == 3
+
+if PY3:
+    # In Python 3, this method is named assertCountEqual.
+    unittest.TestCase.assertItemsEqual = unittest.TestCase.assertCountEqual
 
 # Do not try any of this in real code - this is just for sake of tests.
 class frozendict(dict):
@@ -38,7 +45,6 @@ class SuperpositionTest(unittest.TestCase):
 
     def testCreation(self):
         """Test that creation is reasonable."""
-        
         # Providing the same object twice will still build a superposition.
         s = superposition.superposition("foo", "foo")
         # This object is a superposition type...
@@ -49,6 +55,7 @@ class SuperpositionTest(unittest.TestCase):
 
         # Using meld is sometimes more convenient for this.
         s = superposition.meld("foo", "foo")
+        
         # This object is actually a string.
         self.assertIsInstance(s, basestring)
         # It can still be manipulated with the superposition-aware protocol,

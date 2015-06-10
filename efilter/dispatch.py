@@ -93,7 +93,7 @@ class polymorphic(object):
 
     @property
     def func_name(self):
-        return self.func.func_name
+        return self.func.__name__
 
     def __repr__(self):
         return "polymorphic(%s)" % self.func_name
@@ -189,7 +189,7 @@ class polymorphic(object):
 
         try:
             dispatch_mro = dispatch_type.mro()
-        except TypeError:
+        except (TypeError, AttributeError): # py3 needs to catch AttributeError here
             # Not every type has an MRO.
             dispatch_mro = ()
 
@@ -233,7 +233,8 @@ class polymorphic(object):
                         result = candidate_func
                         result_type = candidate_type
 
-                if match < best_match:
+                # python2 allows for gt None checks but py3 does not..
+                if best_match is not None and match < best_match:
                     result = candidate_func
                     result_type = candidate_type
                     best_match = match
