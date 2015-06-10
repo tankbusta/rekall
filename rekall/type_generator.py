@@ -87,12 +87,10 @@ import re
 from rekall import registry
 from rekall import obj
 from rekall import utils
+from rekall.compat import with_metaclass
 
-
-class DynamicParser(object):
+class DynamicParser(with_metaclass(registry.MetaclassRegistry)):
     """A dynamic profile processor base class."""
-
-    __metaclass__ = registry.MetaclassRegistry
 
     def calculate(self, session):
         """Returns the expected value or a NoneObject."""

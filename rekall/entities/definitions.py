@@ -47,15 +47,15 @@ Entity = component.DeclareComponent(
 
 Named = component.DeclareComponent(
     "Named", "Human-readable identifying information.",
-    component.Field("name", unicode, "Human-readable name", width=40),
-    component.Field("kind", unicode, "Human-readable type", width=16))
+    component.Field("name", str, "Human-readable name", width=40),
+    component.Field("kind", str, "Human-readable type", width=16))
 
 
 Struct = component.DeclareComponent(
     "Struct", "Stores base objects, mostly structs.",
     component.Field("base", types.BaseObjectDescriptor(),
                     "An instance of BaseObject."),
-    component.Field("type", unicode, "Class name of the base object."),
+    component.Field("type", str, "Class name of the base object."),
     component.Field("state", {"freed", "allocated"},
                     "Allocation state (freed or not)."))
 
@@ -65,7 +65,7 @@ AddressSpace = component.DeclareComponent(
     component.Field("dtb", int, "The DTB of this address space, if any."),
     component.Field("type", {"virtual", "physical"},
                     "Physical AS won't have a DTB."),
-    component.Field("architecture", unicode,
+    component.Field("architecture", str,
                     "The CPU architecture (e.g. x86_64 or ARM_32)."),
     component.Field("owner", entity.IdentityDescriptor(),
                     "The process, if any, that owns this address space."))
@@ -80,7 +80,7 @@ MemoryDescriptor = component.DeclareComponent(
                     "End of the range, valid in the address_space."),
     component.Field("address_space", entity.IdentityDescriptor(),
                     "The address space start/end are valid in."),
-    component.Field("label", unicode,
+    component.Field("label", str,
                     "Purpose of this range. E.g. __TEXT, or mmap."),
     component.Alias("process",
                     alias="MemoryDescriptor/address_space->AddressSpace/owner",
@@ -109,7 +109,7 @@ Buffer = component.DeclareComponent(
     component.Field("size", int, "Size of the buffer (in bytes)."),
     component.Field("state", {"freed", "allocated"},
                     "Allocation state (freed or not)."),
-    component.Field("contents", unicode,
+    component.Field("contents", str,
                     "Raw contents (contains unprintable characters)."),
     component.Field("purpose",
                     {"zones", "terminal_input", "terminal_output",
@@ -124,7 +124,7 @@ SignatureMatch = component.DeclareComponent(
     "Stores a successful string or signature match.",
     component.Field("matched_object", entity.IdentityDescriptor(),
                     "The object containing the match."),
-    component.Field("signature", unicode, "The signature used in the search."),
+    component.Field("signature", str, "The signature used in the search."),
     component.Field("method", {"string", "yara", "regex"},
                     "How was the scan done?"))
 
@@ -142,14 +142,14 @@ Process = component.DeclareComponent(
     component.Field("user", entity.IdentityDescriptor(),
                     "The user with whose credentials this is running.",
                     width=20),
-    component.Field("command", unicode,
+    component.Field("command", str,
                     "The path to the binary or the command that executed.",
                     width=30),
     component.Field("image_file", entity.IdentityDescriptor(),
                     "The file where the process was loaded from.",
                     hidden=True),
     component.Field("priority", int, "Priority of this process.", hidden=True),
-    component.Field("env", unicode, "Process env variables.", hidden=True),
+    component.Field("env", str, "Process env variables.", hidden=True),
     component.Field("arguments", [str],
                     "List of arguments.", width=40, hidden=True),
     component.Field("is_64bit", bool, "Is the process running in 64bit.",
@@ -179,26 +179,26 @@ Session = component.DeclareComponent(
 
 OSILayer2 = component.DeclareComponent(
     "OSILayer2", "MAC-layer endpoint.",
-    component.Field("address", unicode, "Address at layer 2."),
-    component.Field("protocol", unicode, "Layer 2 protocol.", width=18))
+    component.Field("address", str, "Address at layer 2."),
+    component.Field("protocol", str, "Layer 2 protocol.", width=18))
 
 
 OSILayer3 = component.DeclareComponent(
     "OSILayer3", "Network-layer endpoint.",
-    component.Field("address", unicode, "Address at layer 3.", width=48),
-    component.Field("protocol", unicode, "Layer 3 protocol.", width=10))
+    component.Field("address", str, "Address at layer 3.", width=48),
+    component.Field("protocol", str, "Layer 3 protocol.", width=10))
 
 
 OSILayer4 = component.DeclareComponent(
     "OSILayer4", "Transport-layer endpoint.",
     component.Field("port", int, "TCP/UDP port.", width=10),
-    component.Field("protocol", unicode, "Layer 4 protocol.", width=10),
-    component.Field("state", unicode, "State if stateful."))
+    component.Field("protocol", str, "Layer 4 protocol.", width=10),
+    component.Field("state", str, "State if stateful."))
 
 
 OSIDataLayer = component.DeclareComponent(
     "OSIDataLayer", "OSI layers 5-7 constitute the data layer.",
-    component.Field("protocol", unicode,
+    component.Field("protocol", str,
                     "Highest-layer protocol (usually layer 7)."))
 
 
@@ -219,7 +219,7 @@ Endpoint = component.DeclareComponent(
 Connection = component.DeclareComponent(
     "Connection",
     "Connection (TCP) or datagram, if connectionless (UDP).",
-    component.Field("protocol_family", unicode,
+    component.Field("protocol_family", str,
                     "Protocol family determines addressing."),
     component.Field("source", entity.IdentityDescriptor(),
                     "Source of TCP connection or of UDP datagram."),
@@ -255,8 +255,8 @@ ExperimentalSocket = component.DeclareComponent(
 
 Socket = component.DeclareComponent(
     "Socket", "A socket",
-    component.Field("address", unicode, "Memory address of the socket."),
-    component.Field("connected", unicode,
+    component.Field("address", str, "Memory address of the socket."),
+    component.Field("connected", str,
                     "Memory address of other socket in pair."),
     component.Field("type", {"STREAM", "DGRAM", "SEQPACKET"},
                     "Type in AF_UNIX/AF_LOCAL family."),
@@ -266,7 +266,7 @@ Socket = component.DeclareComponent(
 
 NetworkInterface = component.DeclareComponent(
     "NetworkInterface", "A network interface.",
-    component.Field("name", unicode, "E.g. en01, tunnel, etc.", width=6),
+    component.Field("name", str, "E.g. en01, tunnel, etc.", width=6),
     component.Field(
         "state", {"up", "down"}, "State of the inteface.", width=6),
     component.Alias("endpoints", alias="&Endpoint/interface",
@@ -286,7 +286,7 @@ Handle = component.DeclareComponent(
 
 File = component.DeclareComponent(
     "File", "A file/directory/socket with a FS path.",
-    component.Field("path", unicode, "The filesystem path to this file."),
+    component.Field("path", str, "The filesystem path to this file."),
     component.Field("parent", entity.IdentityDescriptor(),
                     "Parent file (directory, ZIP archive, etc.)"),
     component.Alias("handles", alias="&Handle/resource",
@@ -302,13 +302,13 @@ Event = component.DeclareComponent(
     "Something that happened, e.g. 'User/name=h4x0r', 'pwned', 'local/*'",
     component.Field("actor", entity.IdentityDescriptor(), "Who done it.",
                     width=40),
-    component.Field("action", unicode,
+    component.Field("action", str,
                     "One word action, such as 'created' or 'pwned'."),
     component.Field("target", entity.IdentityDescriptor(),
                     "Unwitting (or is it) victim.", width=40),
-    component.Field("description", unicode,
+    component.Field("description", str,
                     "What happened. Did Timmy fall down the well?"),
-    component.Field("native_id", unicode,
+    component.Field("native_id", str,
                     "Native event ID, such as Windows Event ID, etc."),
     component.Field("timestamp", "DatetimeDescriptor", "When did this go down?",
                     width=25),
@@ -344,18 +344,18 @@ Permissions = component.DeclareComponent(
 User = component.DeclareComponent(
     "User", "A user account.",
     component.Field("uid", int, "A unique user id, if any."),
-    component.Field("username", unicode, "System username."),
+    component.Field("username", str, "System username."),
     component.Alias("processes", alias="&Process/user",
                     docstring="Processes running as this user."),
     component.Field("home_dir", entity.IdentityDescriptor(),
                     "File that represents the user's home dir."),
-    component.Field("real_name", unicode, "User's real name."))
+    component.Field("real_name", str, "User's real name."))
 
 
 AllocationZone = component.DeclareComponent(
     "AllocationZone", "Zone as used by zone allocators.",
-    component.Field("name", unicode, "Name of the zone as used by kernel."),
-    component.Field("type", unicode, "Type of thing found in the zone."),
+    component.Field("name", str, "Name of the zone as used by kernel."),
+    component.Field("type", str, "Type of thing found in the zone."),
     component.Field("count_active", int, "Count of allocated elements."),
     component.Field("count_free", int, "Count of freed elements."),
     component.Field("element_size", int, "Size per element."),

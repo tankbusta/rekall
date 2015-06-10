@@ -32,7 +32,8 @@ __author__ = (
 )
 
 from rekall import obj
-from rekall import utils
+
+from rekall.compat import basestring
 
 class Index(obj.Profile):
     """A profile which contains an index to locate other profiles."""
@@ -73,7 +74,7 @@ class Index(obj.Profile):
             # The possible_values can be a single string which means there is
             # only one option. If it is a list, then any of the symbols may
             # match at this offset to be considered a match.
-            if isinstance(possible_values, utils.basestring):
+            if isinstance(possible_values, basestring):
                 possible_values = [possible_values]
 
             # If the offset is not mapped in we can not compare it. Skip it.

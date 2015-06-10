@@ -31,7 +31,7 @@ from rekall import config
 from rekall import obj
 from rekall import registry
 from rekall.ui import text as text_renderer
-
+from rekall.compat import with_metaclass, itervalues
 
 class Error(Exception):
     """Raised for plugin errors."""
@@ -49,7 +49,7 @@ class Abort(Error):
     """Signal aborting of the plugin."""
 
 
-class Command(object):
+class Command(with_metaclass(registry.MetaclassRegistry)):
     """A command can be run from the rekall command line.
 
     Commands can be automatically imported into the shell's namespace and are
@@ -71,7 +71,6 @@ class Command(object):
 
     # This class will not be registered (but extensions will).
     __abstract = True
-    __metaclass__ = registry.MetaclassRegistry
 
     # This declares that this plugin only exists in the interactive session.
     interactive = False
@@ -335,7 +334,7 @@ class PluginMetadataDatabase(object):
     def Rebuild(self):
         self.db = {}
 
-        for plugin_cls in Command.classes.itervalues():
+        for plugin_cls in itervalues(Command.classes):
             plugin_name = plugin_cls.name
             self.db.setdefault(plugin_name, []).append(
                 config.CommandMetadata(plugin_cls))

@@ -138,6 +138,7 @@ from rekall import utils
 from rekall import testlib
 from rekall import threadpool
 from rekall.ui import text
+from rekall.compat import basestring
 
 # Bring in all the tests and all the plugins
 # pylint: disable=unused-import
@@ -268,7 +269,7 @@ exit 0
                 merged_config = defaults.copy()
                 merged_config.update(test_config)
 
-                if isinstance(v, utils.basestring):
+                if isinstance(v, basestring):
                     v = v % merged_config
                     test_config[k] = v
 

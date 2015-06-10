@@ -26,7 +26,7 @@ from os import path
 from rekall import addrspace
 from rekall import yaml_utils
 from rekall.plugins.addrspaces import standard
-
+from rekall.compat import UNICODE_TYPES
 
 class MacPmemAddressSpace(addrspace.RunBasedAddressSpace):
     """Implements an address space to overlay the new MacPmem device."""
@@ -46,10 +46,15 @@ class MacPmemAddressSpace(addrspace.RunBasedAddressSpace):
         self.fname = filename or (self.session and self.session.GetParameter(
             "filename"))
 
+        #XXX(cschmitt): fix this
+        if isinstance(self.fname, UNICODE_TYPES):
+            self.fname = self.fname.decode('utf-8', 'ignore')
+
         self.as_assert(self.fname, "Filename must be specified.")
         self.fd = open(self.fname, "r")
 
         self.fname_info = "%s_info" % self.fname
+       # print(self.fname_info, type(self.fname_info))
         self.as_assert(path.exists(self.fname_info),
                        "MacPmem would declare a YML device at %s" %
                        self.fname_info)

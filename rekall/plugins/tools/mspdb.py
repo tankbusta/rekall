@@ -89,7 +89,11 @@ import ntpath
 import os
 import platform
 import subprocess
-import urllib2
+
+try:
+    import urllib2
+except ImportError:
+    import urllib.request as urllib2
 
 from rekall import addrspace
 from rekall import plugin

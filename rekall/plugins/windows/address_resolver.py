@@ -30,6 +30,7 @@ from rekall.plugins.common import address_resolver
 from rekall.plugins.windows import common
 from rekall.plugins.overlays.windows import pe_vtypes
 from rekall.plugins.overlays.windows import windows
+from rekall.compat import basestring
 
 
 config.DeclareOption(
@@ -306,7 +307,7 @@ class WindowsAddressResolver(address_resolver.AddressResolverMixin,
 
     def LoadProfileForName(self, name):
         """Returns the profile responsible for the symbol name."""
-        if not isinstance(name, utils.basestring):
+        if not isinstance(name, basestring):
             raise TypeError("Name should be a string.")
 
         self._EnsureInitialized()

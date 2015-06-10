@@ -38,6 +38,8 @@ from rekall import constants
 from rekall import plugin
 from rekall import utils
 
+from rekall.compat import basestring, iteritems
+
 config.DeclareOption("--plugin", default=[], type="ArrayStringParser",
                      help="Load user provided plugin bundle.")
 
@@ -299,7 +301,7 @@ def ConfigureCommandLineParser(command_metadata, parser, critical=False):
         groups[command_metadata.plugin_cls.name] = parser.add_argument_group(
             "Plugin %s options" % command_metadata.plugin_cls.name)
 
-    for name, options in command_metadata.args.iteritems():
+    for name, options in iteritems(command_metadata.args):
         kwargs = options.copy()
         name = kwargs.pop("name", None) or name
 
@@ -464,7 +466,7 @@ class IntParser(argparse.Action):
         return value
 
     def __call__(self, parser, namespace, values, option_string=None):
-        if isinstance(values, utils.basestring):
+        if isinstance(values, basestring):
             values = self.parse_int(values)
         setattr(namespace, self.dest, values)
 
@@ -486,7 +488,7 @@ class ArrayIntParser(IntParser):
 
     def __call__(self, parser, namespace, values, option_string=None):
         result = []
-        if isinstance(values, utils.basestring):
+        if isinstance(values, basestring):
             values = [values]
 
         for value in values:
@@ -499,7 +501,7 @@ class ArrayStringParser(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         result = []
 
-        if isinstance(values, utils.basestring):
+        if isinstance(values, basestring):
             values = [values]
 
         for value in values:

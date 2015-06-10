@@ -24,13 +24,17 @@ __author__ = "Michael Cohen <scudette@google.com>"
 # pylint: disable=unused-import
 import logging
 
-from rekall.plugins.tools import aff4acquire
 from rekall.plugins.tools import caching_url_manager
 from rekall.plugins.tools import ewf
 from rekall.plugins.tools import json_tools
 from rekall.plugins.tools import profile_tool
 from rekall.plugins.tools import ipython
 from rekall.plugins.tools import mspdb
+
+try:
+    from rekall.plugins.tools import aff4acquire
+except ImportError as e:
+    logging.info("aff4acquire disabled: %s", e)
 
 try:
     from rekall.plugins.tools import webconsole_plugin

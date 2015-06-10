@@ -36,6 +36,8 @@ try:
 except ImportError:
     from io import StringIO
 
+from rekall.compat import xrange
+
 def get_displacement(offset):
     """Calculate the displacement."""
     result = 0

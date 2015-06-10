@@ -35,6 +35,8 @@ import math
 import struct
 import time
 
+from rekall.compat import xrange
+
 DICTIONARY_SIZE = 16
 
 TAGS_AREA_OFFSET = 4

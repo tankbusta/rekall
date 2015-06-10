@@ -53,6 +53,7 @@ from rekall.plugins import core
 from rekall.plugins import guess_profile
 from rekall.plugins.filesystems import lznt1
 from rekall.plugins.overlays import basic
+from rekall.compat import xrange
 
 
 class Error(Exception):

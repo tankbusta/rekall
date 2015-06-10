@@ -62,11 +62,13 @@ from rekall import config
 from rekall import plugin
 from rekall import registry
 from rekall import session as rekall_session
+from rekall.compat import with_metaclass
 
 
-class RekallBaseUnitTestCase(unittest.TestCase):
+class RekallBaseUnitTestCase(with_metaclass(registry.MetaclassRegistry,
+                                            unittest.TestCase)):
     """Base class for all rekall unit tests."""
-    __metaclass__ = registry.MetaclassRegistry
+    
     __abstract = True
 
     # The parameters to run this test with. These parameters are written to the

@@ -38,6 +38,7 @@ import os
 import tempfile
 
 from rekall import constants
+from rekall.compat import iteritems
 
 
 class CommandMetadata(object):
@@ -135,7 +136,7 @@ class CommandMetadata(object):
         If an option in args is None, we update it with the default value for
         this option.
         """
-        for name, options in self.args.iteritems():
+        for name, options in iteritems(self.args):
             if options.get("dest") == "SUPPRESS":
                 continue
 
@@ -231,7 +232,7 @@ def MergeConfigOptions(state):
         config_data = CreateDefaultConfigFile()
 
     # First apply the defaults:
-    for name, options in OPTIONS.args.iteritems():
+    for name, options in iteritems(OPTIONS.args):
         if name not in config_data:
             config_data[name] = options.get("default")
 
@@ -255,6 +256,6 @@ def DeclareOption(*args, **kwargs):
     kwargs["positional"] = False
     default = kwargs.get("default")
     if default is not None and isinstance(default, str):
-        kwargs["default"] = unicode(default)
+        kwargs["default"] = default
 
     OPTIONS.add_argument(*args, **kwargs)

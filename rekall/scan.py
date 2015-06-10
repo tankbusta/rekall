@@ -27,8 +27,9 @@ from rekall import addrspace
 from rekall import constants
 from rekall import registry
 
+from rekall.compat import with_metaclass
 
-class ScannerCheck(object):
+class ScannerCheck(with_metaclass(registry.MetaclassRegistry)):
     """ A scanner check is a special class which is invoked on an AS to check
     for a specific condition.
 
@@ -37,8 +38,6 @@ class ScannerCheck(object):
 
     This class is the base class for all checks.
     """
-
-    __metaclass__ = registry.MetaclassRegistry
     __abstract = True
 
     def __init__(self, profile=None, address_space=None, **_kwargs):
@@ -243,10 +242,8 @@ class RegexCheck(ScannerCheck):
         return bool(m)
 
 
-class BaseScanner(object):
+class BaseScanner(with_metaclass(registry.MetaclassRegistry)):
     """A more thorough scanner which checks every byte."""
-
-    __metaclass__ = registry.MetaclassRegistry
 
     progress_message = "Scanning 0x%(offset)08X with %(name)s"
 

@@ -93,7 +93,7 @@ import time
 from rekall import config
 from rekall import registry
 from rekall import utils
-
+from rekall.compat import basestring
 
 config.DeclareOption(
     "-v", "--verbose", default=False, type="Boolean",
@@ -165,7 +165,7 @@ class ObjectRenderer(object):
         """A constructor for an ObjectRenderer by name."""
         cls._BuildRendererCache()
 
-        if not isinstance(renderer, utils.basestring):
+        if not isinstance(renderer, basestring):
             renderer = renderer.__class__.__name__
 
         # Find the object renderer which works for this name.
@@ -179,7 +179,7 @@ class ObjectRenderer(object):
         except KeyError:
             cls._BuildRendererCache()
 
-            if not isinstance(renderer, utils.basestring):
+            if not isinstance(renderer, basestring):
                 renderer = renderer.__class__.__name__
 
             # MRO is the list of object inheritance for each type. For example:
@@ -203,7 +203,7 @@ class ObjectRenderer(object):
             for object_renderer_cls in cls.classes.values():
                 for impl_renderer in object_renderer_cls.renderers:
                     render_types = object_renderer_cls.renders_type
-                    if isinstance(render_types, utils.basestring):
+                    if isinstance(render_types, basestring):
                         render_types = (render_types,)
 
                     for render_type in render_types:
@@ -237,7 +237,7 @@ class ObjectRenderer(object):
         """
         cls._BuildRendererCache()
 
-        if not isinstance(renderer, utils.basestring):
+        if not isinstance(renderer, basestring):
             renderer = renderer.__class__.__name__
 
         # Search for a handler which supports both the renderer and the object

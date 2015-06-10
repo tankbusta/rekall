@@ -125,9 +125,12 @@ class FileAddressSpace(FDAddressSpace):
                        "session.SetParameter('filename', 'MyFile.raw').")
 
         self.name = os.path.abspath(path)
+
         self.fname = self.name
         self.mode = 'rb'
 
+        print(path, type(path))
+        
         if path.startswith(r"\\\\.\\"):
             raise RuntimeError(
                 "Unable to open a device without the win32file package "

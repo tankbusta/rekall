@@ -23,16 +23,19 @@ Exists solely to support rekall.entities.definitions.
 __author__ = "Adam Sindelar <adamsh@google.com>"
 
 import datetime
+import sys
 
 from rekall import obj
 from rekall import registry
+from rekall.compat import with_metaclass
+
+PY3 = sys.version_info[0] == 3
 
 
-class TypeDescriptor(object):
+class TypeDescriptor(with_metaclass(registry.MetaclassRegistry)):
     """Defines a type descriptor, which can coerce values into target type."""
 
     type_name = None
-    __metaclass__ = registry.MetaclassRegistry
 
     def chill_coerce(self, value):
         """Like coerce, but is chill about getting exceptions.
@@ -97,25 +100,24 @@ class ScalarDescriptor(TypeDescriptor):
     def __repr__(self):
         return "%s (scalar type)" % self.type_cls.__name__
 
+if not PY3:
+    class UnicodeDescriptor(TypeDescriptor):
+        type_cls = unicode
+        type_name = "unicode"
 
-class UnicodeDescriptor(TypeDescriptor):
-    type_cls = unicode
-    type_name = "unicode"
+        def coerce(self, value):
+            if value == None:
+                return None
 
-    def coerce(self, value):
-        if value == None:
-            return None
+            # Already in unicode.
+            elif isinstance(value, unicode):
+                return value
 
-        # Already in unicode.
-        elif isinstance(value, unicode):
-            return value
+            elif isinstance(value, str):
+                return unicode(value, "utf-8", "ignore")
 
-        elif isinstance(value, str):
-            return unicode(value, "utf-8", "ignore")
-
-        # Call the object's __unicode__ method if needed.
-        return unicode(value)
-
+            # Call the object's __unicode__ method if needed.
+            return unicode(value)
 
 class DatetimeDescriptor(ScalarDescriptor):
     """Python's datetime is a special snowflake that requires some massaging.
@@ -275,7 +277,7 @@ def TypeFactory(type_desc):
         # Fall through for stuff defined explictly.
         return type_desc
 
-    if type_desc == unicode:
+    if not PY3 and type_desc == unicode:
         return UnicodeDescriptor()
 
     if isinstance(type_desc, type):

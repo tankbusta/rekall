@@ -23,7 +23,11 @@
 __author__ = "Michael Cohen <scudette@google.com>"
 
 import os
-import site
+
+try:
+    from _sitebuiltins import _Helper
+except ImportError:
+    from site import _Helper
 
 from rekall import constants
 from rekall import plugin
@@ -184,7 +188,7 @@ class SessionMod(plugin.Command):
 
 # pylint: disable=protected-access
 
-class RekallHelper(site._Helper):
+class RekallHelper(_Helper):
     """A More useful default help function."""
     HELP_MESSAGE = """Welocome to Rekall Memory Forensics.
 
@@ -223,7 +227,7 @@ help profile   - What are Profiles?
         else:
             print(core.Info(item=item))
 
-site._Helper = RekallHelper
+_Helper = RekallHelper
 
 
 class PagingLimitHook(kb.ParameterHook):

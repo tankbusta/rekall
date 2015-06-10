@@ -40,7 +40,7 @@ try:
     import urllib2
     import urlparse
 except ImportError: # python 3
-    from io import StringIO
+    from io import BytesIO as StringIO
     import urllib.request as urllib2
     import urllib.parse as urlparse
 
@@ -55,6 +55,7 @@ from rekall import constants
 from rekall import obj
 from rekall import registry
 from rekall import utils
+from rekall.compat import with_metaclass, UNICODE_TYPES
 
 # The maximum size of a single data object we support. This represent the
 # maximum amount of data we are prepared to read into memory at once.
@@ -65,7 +66,7 @@ class IOManagerError(IOError):
     """An IOError from the IO Manager."""
 
 
-class IOManager(object):
+class IOManager(with_metaclass(registry.MetaclassRegistry)):
     """The baseclass for abstracted IO implementations.
 
     The IO manager classes are responsible for managing access to profiles. A
@@ -77,8 +78,6 @@ class IOManager(object):
     The IO manager may actually store the profile file using some other scheme,
     but that internal scheme is private to itself.
     """
-
-    __metaclass__ = registry.MetaclassRegistry
     __abstract = True
 
     order = 100
@@ -212,6 +211,8 @@ class IOManager(object):
         return json.dumps(data, sort_keys=True, **options)
 
     def Decoder(self, raw):
+        if isinstance(raw, UNICODE_TYPES):
+            raw = raw.decode('utf-8', 'ignore')
         return json.loads(raw)
 
     def GetData(self, name, raw=False):

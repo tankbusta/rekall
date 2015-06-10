@@ -26,6 +26,8 @@ from rekall import plugin
 from rekall import testlib
 from rekall import utils
 
+from rekall.compat import basestring
+
 from rekall.entities import entity as entity_module
 from rekall.entities import component as entity_component
 
@@ -332,7 +334,7 @@ class EntityFind(plugin.ProfileCommand):
 
         self._entity_columns = []
         for column in self.columns:
-            if isinstance(column, utils.basestring):
+            if isinstance(column, basestring):
                 self._entity_columns.append(dict(attribute=column))
             else:
                 self._entity_columns.append(column)

@@ -41,5 +41,5 @@ except ImportError:
 
 try:
     import rekall.plugins.addrspaces.aff4
-except ImportError:
+except (ImportError, SyntaxError): # pyaff4 needs Py3 work
     pass

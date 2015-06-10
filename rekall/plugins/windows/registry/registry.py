@@ -34,6 +34,7 @@ import struct
 from rekall import addrspace
 from rekall import obj
 from rekall import utils
+from rekall.compat import basestring
 
 from rekall.plugins.windows import common
 
@@ -543,7 +544,7 @@ class Registry(object):
            key: A string path to the key (separated with / or \\) or a list of
               path components (useful if the keyname contains /).
         """
-        if isinstance(key, utils.basestring):
+        if isinstance(key, basestring):
             # / can be part of the key name...
             key = filter(None, re.split(r"[\\/]", key))
 

@@ -36,12 +36,12 @@ from rekall.plugins.darwin import common as darwin_common
 from rekall.plugins.linux import common as linux_common
 from rekall.plugins.windows import common as win_common
 from rekall.plugins.overlays.windows import pe_vtypes
+from rekall.compat import with_metaclass
 
 
-class DetectionMethod(object):
+class DetectionMethod(with_metaclass(registry.MetaclassRegistry)):
     """A baseclass to implement autodetection methods."""
 
-    __metaclass__ = registry.MetaclassRegistry
     name = None
 
     def __init__(self, session=None):

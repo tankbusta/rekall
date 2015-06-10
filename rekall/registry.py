@@ -67,7 +67,9 @@ class MetaclassRegistry(UniqueObjectIdMetaclass):
         super(MetaclassRegistry, cls).__init__(name, bases, env_dict)
 
         cls._install_constructors(cls)
-
+        cls.classes = {}
+        cls.classes_by_name = {}
+        
         # Attach the classes dict to the baseclass and have all derived classes
         # use the same one:
         for base in bases:
@@ -93,9 +95,15 @@ class MetaclassRegistry(UniqueObjectIdMetaclass):
 
         if not cls.__name__.startswith("Abstract"):
             if cls.__name__ in cls.classes:
+                #XXX(cschmitt): Fix this
+                print(
+                    "Multiple definitions for class %s (%s)" % (
+                        cls, cls.classes[cls.__name__]))
+                '''
                 raise RuntimeError(
                     "Multiple definitions for class %s (%s)" % (
                         cls, cls.classes[cls.__name__]))
+                '''
 
             cls.classes[cls.__name__] = cls
             name = getattr(cls, "name", None)

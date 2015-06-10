@@ -28,6 +28,7 @@ import math
 from rekall import obj
 from rekall import utils
 from rekall.plugins.overlays import basic
+from rekall.compat import basestring
 
 
 class File(object):
@@ -35,7 +36,7 @@ class File(object):
 
     def __init__(self, filename=None, mountpoint=None, dentry=None,
                  is_root=False, session=None):
-        if isinstance(filename, (utils.basestring, basic.String)):
+        if isinstance(filename, (basestring, basic.String)):
             self.filename = utils.SmartUnicode(filename).split("/")
         elif isinstance(filename, list):
             self.filename = filename

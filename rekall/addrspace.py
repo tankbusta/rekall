@@ -32,6 +32,7 @@
 """
 from rekall import registry
 from rekall import utils
+from rekall.compat import with_metaclass
 
 
 class TranslationLookasideBuffer(utils.FastStore):
@@ -58,10 +59,8 @@ class TranslationLookasideBuffer(utils.FastStore):
             vaddr >> self.PAGE_SHIFT, paddr)
 
 
-class BaseAddressSpace(object):
+class BaseAddressSpace(with_metaclass(registry.MetaclassRegistry)):
     """ This is the base class of all Address Spaces. """
-
-    __metaclass__ = registry.MetaclassRegistry
     __abstract = True
 
     order = 10

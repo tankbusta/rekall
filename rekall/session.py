@@ -43,6 +43,7 @@ from rekall import registry
 from rekall import utils
 
 from rekall.entities import manager as entity_manager
+from rekall.compat import basestring, with_metaclass, iteritems, UNICODE_TYPES
 from rekall.ui import renderer
 from rekall.ui import json_renderer
 
@@ -142,7 +143,7 @@ class Cache(utils.AttributeDict):
     def __str__(self):
         """Print the contents somewhat concisely."""
         result = []
-        for k, v in self.iteritems():
+        for k, v in iteritems(self):
             if isinstance(v, obj.BaseObject):
                 v = repr(v)
 
@@ -270,7 +271,7 @@ class Configuration(Cache):
         return profile
 
     def _set_logging(self, level, _):
-        if isinstance(level, utils.basestring):
+        if isinstance(level, basestring):
             level = getattr(logging, level.upper(), logging.INFO)
 
         if level == None:
@@ -412,13 +413,11 @@ class HoardingLogHandler(logging.Handler):
             self.logrecord_buffer = []
 
 
-class Session(object):
+class Session(with_metaclass(registry.MetaclassRegistry)):
     """Base session.
 
     This session contains the bare minimum to use rekall.
     """
-
-    __metaclass__ = registry.MetaclassRegistry
 
     # The currently active address resolver.
     _address_resolver = None
@@ -603,7 +602,7 @@ class Session(object):
         So we can pass them as valid python parameters.
         """
         result = {}
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             result[k.replace("-", "_")] = v
         return result
 
@@ -639,7 +638,7 @@ class Session(object):
 
     def _GetPluginName(self, plugin_obj):
         """Extract the name from the plugin object."""
-        if isinstance(plugin_obj, utils.basestring):
+        if isinstance(plugin_obj, basestring):
             return plugin_obj
 
         elif utils.issubclass(plugin_obj, plugin.Command):
@@ -649,7 +648,7 @@ class Session(object):
             return plugin_obj.name
 
     def _GetPluginObj(self, plugin_obj, *pos_args, **kwargs):
-        if isinstance(plugin_obj, utils.basestring):
+        if isinstance(plugin_obj, basestring):
             plugin_name = plugin_obj
 
         elif utils.issubclass(plugin_obj, plugin.Command):
@@ -664,7 +663,7 @@ class Session(object):
                 "First parameter should be a plugin name or instance.")
 
         # When passed as a string this specifies a plugin name.
-        if isinstance(plugin_obj, utils.basestring):
+        if isinstance(plugin_obj, basestring):
             plugin_cls = getattr(self.plugins, plugin_obj, None)
             if plugin_cls is None:
                 self.logging.error(
@@ -742,7 +741,8 @@ class Session(object):
 
         if isinstance(name, obj.Profile):
             return name
-
+        elif isinstance(name, UNICODE_TYPES):
+            name = name.decode('utf-8', 'ignore')
         # We only want to deal with unix paths.
         name = name.replace("\\", "/")
 
@@ -822,7 +822,7 @@ class Session(object):
         We instantiate the renderer specified in self.GetParameter("format").
         """
         ui_renderer = self.GetParameter("format", "text")
-        if isinstance(ui_renderer, utils.basestring):
+        if isinstance(ui_renderer, basestring):
             ui_renderer_cls = renderer.BaseRenderer.ImplementationByName(
                 ui_renderer)
             ui_renderer = ui_renderer_cls(session=self)
@@ -841,7 +841,7 @@ class Session(object):
         if value == None:
             self.state.cache.Set('profile_obj', value)
 
-        elif isinstance(value, utils.basestring):
+        elif isinstance(value, basestring):
             with self.state:
                 self.state.Set('profile', value)
 
@@ -870,7 +870,7 @@ class Session(object):
 
         # Now override all parameters as requested.
         with new_session:
-            for k, v in kwargs.iteritems():
+            for k, v in iteritems(kwargs):
                 new_session.SetParameter(k, v)
         return new_session
 

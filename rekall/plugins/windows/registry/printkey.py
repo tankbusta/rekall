@@ -32,6 +32,7 @@ from rekall import utils
 from rekall.plugins import core
 from rekall.plugins.windows.registry import registry
 from rekall.plugins.overlays import basic
+from rekall.compat import basestring
 
 
 class PrintKey(registry.RegistryPlugin):
@@ -124,7 +125,7 @@ class PrintKey(registry.RegistryPlugin):
                     renderer.format("{0:addrpad} ", value.obj_vm.vtop(value))
                     if value.Type == 'REG_BINARY':
                         data = value.DecodedData
-                        if isinstance(data, utils.basestring):
+                        if isinstance(data, basestring):
                             renderer.format(
                                 u"{0:width=13} {1:width=15} : {2}\n",
                                 value.Type, value.Name, self.voltext(value))

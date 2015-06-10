@@ -38,6 +38,7 @@ import textwrap
 from rekall import config
 from rekall import registry
 from rekall import utils
+from rekall.compat import basestring, xrange, UNICODE_TYPES
 
 from rekall.ui import renderer as renderer_module
 
@@ -864,14 +865,14 @@ class Cell(BaseCell):
             if offset <= start <= limit + adjust:
                 escape_seq = ""
                 if fg is not None:
-                    if isinstance(fg, utils.basestring):
+                    if isinstance(fg, basestring):
                         fg = self.colorizer.COLOR_MAP[fg]
 
                     escape_seq += self.colorizer.tparm(
                         ["setaf", "setf"], fg)
 
                 if bg is not None:
-                    if isinstance(bg, utils.basestring):
+                    if isinstance(bg, basestring):
                         bg = self.colorizer.COLOR_MAP[bg]
 
                     escape_seq += self.colorizer.tparm(
@@ -1167,7 +1168,6 @@ class UnicodeWrapper(object):
         self.encoding = encoding
 
     def write(self, data):
-        data = utils.SmartUnicode(data).encode(self.encoding, "replace")
         self.fd.write(data)
 
     def flush(self):

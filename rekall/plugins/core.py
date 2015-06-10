@@ -37,6 +37,7 @@ from rekall import obj
 from rekall import testlib
 from rekall import utils
 
+from rekall.compat import basestring
 
 class Info(plugin.Command):
     """Print information about various subsystems."""
@@ -643,7 +644,7 @@ class LoadPlugins(plugin.Command):
 
     def __init__(self, path, **kwargs):
         super(LoadPlugins, self).__init__(**kwargs)
-        if isinstance(path, utils.basestring):
+        if isinstance(path, basestring):
             path = [path]
 
         args.LoadPlugins(path)
@@ -714,7 +715,7 @@ class DT(plugin.ProfileCommand):
         load_as = self.session.plugins.load_as(session=self.session)
         self.address_space = load_as.ResolveAddressSpace(address_space)
 
-        if isinstance(target, utils.basestring):
+        if isinstance(target, basestring):
             self.target = self.profile.Object(
                 target, offset=self.offset, vm=self.address_space)
 
@@ -897,7 +898,7 @@ class Dump(plugin.Command):
         super(Dump, self).__init__(**kwargs)
 
         # Allow offset to be symbol name.
-        if isinstance(offset, utils.basestring):
+        if isinstance(offset, basestring):
             self.offset = self.session.address_resolver.get_address_by_name(
                 offset)
 

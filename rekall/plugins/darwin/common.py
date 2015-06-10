@@ -28,6 +28,8 @@ from rekall import plugin
 from rekall import scan
 from rekall import utils
 
+from rekall.compat import basestring
+
 from rekall.plugins import core
 
 # A few notes on XNU's (64bit) memory layout:
@@ -507,7 +509,7 @@ class DarwinProcessFilter(DarwinPlugin):
 
         self.pids = pids
         self.proc_regex_text = proc_regex
-        if isinstance(proc_regex, utils.basestring):
+        if isinstance(proc_regex, basestring):
             proc_regex = re.compile(proc_regex, re.I)
 
         self.proc_regex = proc_regex

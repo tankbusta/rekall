@@ -2,9 +2,9 @@
 # collect information.
 
 from rekall import registry
+from rekall.compat import with_metaclass
 
-
-class ParameterHook(object):
+class ParameterHook(with_metaclass(registry.MetaclassRegistry)):
     """A mechanism for automatically calculating a parameter.
 
     The session contains many parameters which are calculated through the
@@ -20,8 +20,6 @@ class ParameterHook(object):
     parameter when it is not known.
     """
     __abstract = True
-
-    __metaclass__ = registry.MetaclassRegistry
 
     # The name of the parameter we will be calculating. This class will
     # automatically be called when someone accessed this name, and it is not

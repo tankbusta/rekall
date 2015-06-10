@@ -38,13 +38,13 @@ import operator
 import os
 import struct
 import copy
+import traceback
 
 from rekall import addrspace
 from rekall import registry
 from rekall import utils
 from rekall.ui import renderer
-
-import traceback
+from rekall.compat import basestring, xrange, with_metaclass, iteritems
 
 
 class ProfileLog(object):
@@ -151,20 +151,19 @@ class Curry(object):
         return getattr(self._target, attr)
 
 
-class NoneObject(object):
+class NoneObject(with_metaclass(registry.MetaclassRegistry)):
     """ A magical object which is like None but swallows bad
     dereferences, __getattr__, iterators etc to return itself.
 
     Instantiate with the reason for the error.
     """
-    __metaclass__ = registry.UniqueObjectIdMetaclass
 
     def __init__(self, reason="None Object", *args, **kwargs):
         # Often None objects are instantiated on purpose so its not really that
         # important to see their reason.
         if kwargs.get("log"):
             logging.log(logging.WARN, reason)
-        self.reason = unicode(reason)
+        self.reason = reason
         self.strict = kwargs.get("strict")
         self.args = args
         if self.strict:
@@ -182,7 +181,7 @@ class NoneObject(object):
         return self
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return self
 
     def __unicode__(self):
         ## If we are strict we blow up here
@@ -301,8 +300,7 @@ class ProfileError(Error):
     """Errors in setting the profile."""
 
 
-class BaseObject(object):
-    __metaclass__ = registry.UniqueObjectIdMetaclass
+class BaseObject(with_metaclass(registry.MetaclassRegistry)):
 
     obj_parent = NoneObject("No parent")
     obj_name = NoneObject("No name")
@@ -758,7 +756,7 @@ class Pointer(NativeType):
                                vm=vm, profile=self.obj_profile,
                                parent=self.obj_parent, name=self.obj_name))
 
-            if isinstance(self.target, utils.basestring):
+            if isinstance(self.target, basestring):
                 result = self.obj_profile.Object(
                     type_name=self.target,
                     context=self.obj_context, **kwargs)
@@ -1415,7 +1413,7 @@ class Struct(BaseAddressComparisonMixIn, BaseObject):
 ## Profiles are the interface for creating/interpreting
 ## objects
 
-class Profile(object):
+class Profile(with_metaclass(registry.MetaclassRegistry)):
     """A collection of types relating to a single compilation unit.
 
     Profiles are usually not instantiated directly. Rather, the profiles are
@@ -1432,9 +1430,6 @@ class Profile(object):
 
     # This hold the executable code compiled from the vtypes above.
     types = None
-
-    # This is the base class for all profiles.
-    __metaclass__ = registry.MetaclassRegistry
 
     # This is a dict of constants
     constants = None
@@ -1562,7 +1557,7 @@ class Profile(object):
 
         self._metadata.update(metadata or {})
 
-        self.name = unicode(name)
+        self.name = name
         self.session = session
         if session is None:
             raise RuntimeError("Session must be specified.")
@@ -1683,7 +1678,7 @@ class Profile(object):
         """Add the kwargs as constants for this profile."""
         self.flush_cache()
 
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             self.constants[k] = v
             if constants_are_addresses:
                 try:
@@ -1697,13 +1692,13 @@ class Profile(object):
 
     def add_reverse_enums(self, **kwargs):
         """Add the kwargs as a reverse enum for this profile."""
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             self.reverse_enums[k] = str(v)
 
     def add_enums(self, **kwargs):
         """Add the kwargs as an enum for this profile."""
         # Alas JSON converts integer keys to strings.
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             self.enums[k] = enum_definition = {}
             for enum, name in v.items():
                 enum_definition[str(enum)] = name
@@ -2015,7 +2010,7 @@ class Profile(object):
             return overlay
 
         # A base string means its an alias of another type.
-        if isinstance(overlay, utils.basestring):
+        if isinstance(overlay, basestring):
             return overlay
 
         # Check the overlay and type descriptor for sanity.

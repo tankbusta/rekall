@@ -35,7 +35,7 @@ from rekall import config
 from rekall import obj
 from rekall import utils
 from rekall.plugins.overlays import native_types
-
+from rekall.compat import basestring, xrange
 
 config.DeclareOption(
     "--timezone", default="UTC", group="Interface",
@@ -251,7 +251,7 @@ class Flags(obj.NativeType):
         return "%s (%s)" % (super(Flags, self).__repr__(), ", ".join(flags))
 
     def write(self, data):
-        if isinstance(data, utils.basestring):
+        if isinstance(data, basestring):
             value = 0
             for item in data.split("|"):
                 item = item.strip()
@@ -822,7 +822,7 @@ class Function(obj.BaseAddressComparisonMixIn, obj.BaseObject):
 
         terms = []
         for e in expressions:
-            if isinstance(e, utils.basestring):
+            if isinstance(e, basestring):
                 e = re.compile(e)
             terms.append(e)
 
