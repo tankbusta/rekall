@@ -104,7 +104,7 @@ class AMD64PagedMemory(intel.IA32PagedMemoryPae):
 
     def vaddr_access(self, vaddr):
         """Is the access bit set on the page for the vaddr?"""
-        vaddr = long(vaddr)
+        vaddr = int(vaddr)
         pml4e = self.get_pml4e(vaddr)
         if not pml4e & self.valid_mask:
             return None
@@ -141,7 +141,7 @@ class AMD64PagedMemory(intel.IA32PagedMemoryPae):
         The function returns either None (no valid mapping)
         or the offset in physical memory where the address maps.
         '''
-        vaddr = long(vaddr)
+        vaddr = int(vaddr)
         pml4e = self.get_pml4e(vaddr)
         if not pml4e & self.valid_mask:
             # Add support for paged out PML4E

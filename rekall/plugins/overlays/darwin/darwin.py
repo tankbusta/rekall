@@ -23,7 +23,7 @@ from rekall import utils
 
 from rekall.plugins.addrspaces import amd64
 from rekall.plugins.overlays import basic
-from rekall.compat import iterkeys
+from rekall.compat import iterkeys, NUMERIC_TYPES
 
 
 darwin_overlay = {
@@ -1265,7 +1265,7 @@ class Darwin64(basic.ProfileLP64, Darwin32):
     def get_constant(self, name, is_address=True):
         """Gets the constant from the profile, correcting for KASLR."""
         base_constant = super(Darwin64, self).get_constant(name)
-        if is_address and isinstance(base_constant, (int, long)):
+        if is_address and isinstance(base_constant, NUMERIC_TYPES):
             return base_constant + self.session.GetParameter(
                 "vm_kernel_slide", 0)
 

@@ -181,7 +181,7 @@ class Pager(object):
 
     def write(self, data):
         # Encode the data according to the output encoding.
-        data = utils.SmartUnicode(data).encode(self.encoding, "replace")
+        data = utils.SmartUnicode(data).decode(self.encoding, "replace")
         if sys.platform == "win32":
             data = data.replace("\n", "\r\n")
 
@@ -660,6 +660,9 @@ class JoinedCell(BaseCell):
         for cell in self.cells:
             contents_width += cell.width + len(self.tablesep)
         contents_width -= len(self.tablesep)
+        
+        if self.width is None:
+            self._width = 0
 
         self._width = max(self.width, contents_width)
         adjustment = self._width - contents_width

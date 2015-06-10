@@ -34,19 +34,21 @@ class BaseObjectTextRenderer(text.TextObjectRenderer):
         )
 
     def render_full(self, target, **options):
-        result = text.Cell(unicode(target.v()), **options)
+        result = text.Cell(str(target.v()), **options)
         return result
 
     def render_value(self, target, **_):
-        return text.Cell(unicode(target.v()))
+        return text.Cell(str(target.v()))
 
 
 class StringTextRenderer(BaseObjectTextRenderer):
     renders_type = "String"
 
     def render_full(self, target, **_):
+        print(type(utils.SmartUnicode(target)))
+        data = utils.SmartUnicode(target).split("\x00")[0]
         return text.Cell(
-            utils.SmartUnicode(target).split("\x00")[0] or u"")
+            data or u"")
 
     render_value = render_full
     render_compact = render_full
@@ -86,7 +88,7 @@ class PythonBoolTextRenderer(text.TextObjectRenderer):
     def render_full(self, target, **_):
         color = "GREEN" if target else "RED"
         return text.Cell(
-            value=unicode(target),
+            value=target,
             highlights=[(0, -1, color, None)])
 
     render_value = render_full
@@ -134,7 +136,7 @@ class FlagsTextRenderer(BaseObjectTextRenderer):
         return text.Cell(u', '.join(flags))
 
     def render_value(self, target, **_):
-        return text.Cell(unicode(self.v()))
+        return text.Cell(self.v())
 
     def render_compact(self, target, **_):
         lines = self.render_full(target).lines

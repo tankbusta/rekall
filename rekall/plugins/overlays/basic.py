@@ -35,7 +35,7 @@ from rekall import config
 from rekall import obj
 from rekall import utils
 from rekall.plugins.overlays import native_types
-from rekall.compat import basestring, xrange
+from rekall.compat import basestring, xrange, UNICODE_TYPES
 
 config.DeclareOption(
     "--timezone", default="UTC", group="Interface",
@@ -75,6 +75,9 @@ class String(obj.StringProxyMixIn, obj.NativeType):
     def startswith(self, other):
         return self.v().startswith(other)
 
+    def split(self, string):
+        return self.v().split(string)
+
     def v(self, vm=None):
         # Make sure to protect ourselves before reading too much at once.
         length = self.length
@@ -86,6 +89,11 @@ class String(obj.StringProxyMixIn, obj.NativeType):
         # TODO: Make this read in chunks to support very large reads.
         vm = vm or self.obj_vm
         data = vm.read(self.obj_offset, length)
+
+        if isinstance(data, UNICODE_TYPES):
+            # Try to interpret it as a unicode encoded string.
+            data = data.decode('utf-8', "ignore")
+
         if self.term is not None:
             left, sep, _ = data.partition(self.term)
             data = left + sep
