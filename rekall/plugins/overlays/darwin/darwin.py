@@ -23,6 +23,7 @@ from rekall import utils
 
 from rekall.plugins.addrspaces import amd64
 from rekall.plugins.overlays import basic
+from rekall.compat import iterkeys
 
 
 darwin_overlay = {
@@ -1217,10 +1218,14 @@ class Darwin32(basic.Profile32Bits, basic.BasicClasses):
         # Some Darwin profiles add a suffix to IOKIT objects. So OSDictionary
         # becomes OSDictionary_class. We automatically generate the overlays and
         # classes to account for this.
-        for k in profile.vtypes.keys():
+
+        # in python2, keys() is a copy. in python3, this raises a RuntimeError
+        # because we modify the profile.vtypes dictionary
+        for k in [k for k in profile.vtypes.keys()]:
             if k.endswith("_class"):
                 stripped_k = k[:-len("_class")]
                 if stripped_k not in profile.vtypes:
+                    #stuff2add[stripped_k] = k
                     profile.vtypes[stripped_k] = profile.vtypes[k]
                     if stripped_k in darwin_overlay:
                         darwin_overlay[k] = darwin_overlay[stripped_k]

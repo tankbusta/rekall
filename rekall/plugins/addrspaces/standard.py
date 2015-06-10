@@ -129,8 +129,6 @@ class FileAddressSpace(FDAddressSpace):
         self.fname = self.name
         self.mode = 'rb'
 
-        print(path, type(path))
-        
         if path.startswith(r"\\\\.\\"):
             raise RuntimeError(
                 "Unable to open a device without the win32file package "

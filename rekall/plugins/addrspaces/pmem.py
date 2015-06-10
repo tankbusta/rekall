@@ -51,7 +51,7 @@ class MacPmemAddressSpace(addrspace.RunBasedAddressSpace):
             self.fname = self.fname.decode('utf-8', 'ignore')
 
         self.as_assert(self.fname, "Filename must be specified.")
-        self.fd = open(self.fname, "r")
+        self.fd = open(self.fname, "rb")
 
         self.fname_info = "%s_info" % self.fname
        # print(self.fname_info, type(self.fname_info))
@@ -104,7 +104,7 @@ class MacPmemAddressSpace(addrspace.RunBasedAddressSpace):
 
         # We're not allowed to read from the offset, so just return zeros.
         if offset is None:
-            return "\x00" * min(length, available_length)
+            return b"\x00" * min(length, available_length)
 
         self.fd.seek(offset)
         return self.fd.read(min(length, available_length))

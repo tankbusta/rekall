@@ -38,7 +38,7 @@ import textwrap
 from rekall import config
 from rekall import registry
 from rekall import utils
-from rekall.compat import basestring, xrange, UNICODE_TYPES
+from rekall.compat import basestring, xrange, UNICODE_TYPES, with_metaclass
 
 from rekall.ui import renderer as renderer_module
 
@@ -325,14 +325,14 @@ class Colorizer(object):
                 self.tparm(["sgr0"]))
 
 
-class TextObjectRenderer(renderer_module.ObjectRenderer):
+class TextObjectRenderer(with_metaclass(registry.MetaclassRegistry,
+                                        renderer_module.ObjectRenderer)):
     """Baseclass for all TextRenderer object renderers."""
 
     # Fall back renderer for all objects.
     renders_type = "object"
     renderers = ["TextRenderer", "WideTextRenderer", "TestRenderer"]
 
-    __metaclass__ = registry.MetaclassRegistry
     DEFAULT_STYLE = "full"
 
     @property

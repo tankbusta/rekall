@@ -383,7 +383,7 @@ class PagedReader(BaseAddressSpace):
         to_read = min(length, self.PAGE_SIZE - (vaddr % self.PAGE_SIZE))
         paddr = self.vtop(vaddr)
         if paddr is None:
-            return "\x00" * to_read
+            return b"\x00" * to_read
 
         return self.base.read(paddr, to_read)
 
@@ -396,7 +396,7 @@ class PagedReader(BaseAddressSpace):
 
         addr, length = int(addr), int(length)
 
-        result = ''
+        result = b''
 
         while length > 0:
             buf = self._read_chunk(addr, length)

@@ -2212,10 +2212,9 @@ class Profile(with_metaclass(registry.MetaclassRegistry)):
           parent: The object can maintain a reference to its parent object.
         """
         name = name or type_name
-
         # Ensure we are called correctly.
-        if name.__class__ not in (unicode, str):
-            raise ValueError("Type name must be a string")
+        if not isinstance(name, basestring):
+            raise ValueError("Type name must be a string not {}".format(type(name.__class__)))
 
         if offset is None:
             offset = 0

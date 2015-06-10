@@ -28,8 +28,8 @@ import collections
 import operator
 
 from rekall import registry
-
 from rekall.entities import types
+from rekall.compat import with_metaclass
 
 from efilter.protocols import superposition
 
@@ -125,7 +125,7 @@ class ComponentDescriptor(types.TypeDescriptor):
         return value
 
 
-class Component(object):
+class Component(with_metaclass(registry.MetaclassRegistry)):
     """A high-performance container similar to namedtuple."""
 
     __slots__ = ("_contents", "_object_id")
@@ -136,7 +136,6 @@ class Component(object):
     component_helpstring = None
 
     __abstract = True
-    __metaclass__ = registry.MetaclassRegistry
 
     typedesc = ComponentDescriptor()
 

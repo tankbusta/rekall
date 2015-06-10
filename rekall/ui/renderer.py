@@ -93,7 +93,7 @@ import time
 from rekall import config
 from rekall import registry
 from rekall import utils
-from rekall.compat import basestring
+from rekall.compat import basestring, with_metaclass
 
 config.DeclareOption(
     "-v", "--verbose", default=False, type="Boolean",
@@ -115,7 +115,7 @@ config.DeclareOption(
 MRO_CACHE = utils.FastStore(100, lock=True)
 
 
-class ObjectRenderer(object):
+class ObjectRenderer(with_metaclass(registry.MetaclassRegistry)):
     """Baseclass for all TestRenderer object renderers."""
 
     # Fall back renderer for all objects. This can also be a list or tuple of
@@ -124,9 +124,7 @@ class ObjectRenderer(object):
 
     # These are the renderers supported by this object renderer.
     renderers = []
-
-    __metaclass__ = registry.MetaclassRegistry
-
+    
     # A cache of Renderer, MRO mappings.
     _RENDERER_CACHE = None
 
@@ -321,7 +319,7 @@ class BaseTable(object):
 
 
 
-class BaseRenderer(object):
+class BaseRenderer(with_metaclass(registry.MetaclassRegistry)):
     """All renderers inherit from this.
 
     This class defines the only public interface for the rendering system. This
@@ -330,8 +328,6 @@ class BaseRenderer(object):
     directly used by the plugins - otherwise plugins will fail when being
     rendered with different renderer implementations.
     """
-
-    __metaclass__ = registry.MetaclassRegistry
 
     # The user friendly name of this renderer. This is used for selection from
     # command line etc.

@@ -32,6 +32,9 @@ if PY3:
     def itervalues(d, **kwargs):
         return iter(d.values(**kwargs))
 
+    def iterkeys(d, **kwargs):
+        return iter(d.keys(**kwargs))
+
 else:
     import types
     import __builtin__
@@ -50,3 +53,6 @@ else:
 
     def itervalues(d, **kwargs):
         return d.itervalues(**kwargs)
+
+    def iterkeys(d, **kwargs):
+        return d.iterkeys(**kwargs)
