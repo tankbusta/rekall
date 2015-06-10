@@ -1,5 +1,5 @@
 import os
-import StringIO
+import io
 
 from flask import Flask
 from flask import helpers
@@ -59,7 +59,7 @@ def InitializeApp(plugins=None, config=None):
     @app.route("/")
     def index():  # pylint: disable=unused-variable
         return helpers.send_file(
-            StringIO.StringIO(ExpandManuskriptHeaders(plugins)),
+            io.StringIO(ExpandManuskriptHeaders(plugins)),
             mimetype="text/html",
             conditional=True)
 

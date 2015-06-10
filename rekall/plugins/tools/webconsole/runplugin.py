@@ -23,7 +23,7 @@
 __author__ = "Mikhail Bushkov <realbushman@gmail.com>"
 
 
-import cStringIO
+import io
 import hashlib
 import logging
 import os
@@ -324,7 +324,7 @@ class RekallRunPlugin(manuskript_plugin.Plugin):
         def download_cell(cell_id):   # pylint: disable=unused-variable
             worksheet = app.config['worksheet']
 
-            data = cStringIO.StringIO()
+            data = io.StringIO()
             with zipfile.ZipFile(
                 data, mode="w", compression=zipfile.ZIP_DEFLATED) as out_fd:
                 path = "%s/" % cell_id
@@ -499,7 +499,7 @@ class RekallRunPlugin(manuskript_plugin.Plugin):
         @app.route("/downloads/worksheet")
         def download_worksheet():  # pylint: disable=unused-variable
             worksheet = app.config["worksheet"]
-            data = cStringIO.StringIO()
+            data = io.StringIO()
             with zipfile.ZipFile(
                 data, mode="w", compression=zipfile.ZIP_DEFLATED) as out_fd:
                 cells = worksheet.GetData("notebook_cells") or []
@@ -553,7 +553,7 @@ class RekallRunPlugin(manuskript_plugin.Plugin):
             session_id = int(source.pop("session_id"))
             session = worksheet.session.find_session(session_id)
 
-            output = cStringIO.StringIO()
+            output = io.StringIO()
             output_queue = Queue.Queue()
             renderer = WebConsoleRenderer(
                 session=session, output=output, cell_id=cell_id,

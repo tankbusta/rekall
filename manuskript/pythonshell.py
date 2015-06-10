@@ -1,6 +1,6 @@
 import ast
 import codegen
-import StringIO
+import io
 import sys
 
 
@@ -48,8 +48,8 @@ class PythonShell(object):
                 TypeError, MemoryError) as e:
             raise ParseError(e)
 
-        stdout = StringIO.StringIO()
-        stderr = StringIO.StringIO()
+        stdout = io.StringIO()
+        stderr = io.StringIO()
         prev_stdout = sys.stdout
         prev_stderr = sys.stderr
         sys.stdout = stdout

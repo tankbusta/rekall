@@ -28,7 +28,7 @@ https://github.com/libyal/reviveit/
 https://github.com/sleuthkit/sleuthkit/blob/develop/tsk/fs/ntfs.c
 """
 import array
-import cStringIO
+import io
 import logging
 import struct
 
@@ -62,8 +62,8 @@ def decompress_data(cdata, logger=None):
         lznt1_logger = logger.getChild("lznt1")
     # Change to DEBUG to turn on module level debugging.
     lznt1_logger.setLevel(logging.ERROR)
-    in_fd = cStringIO.StringIO(cdata)
-    output_fd = cStringIO.StringIO()
+    in_fd = io.StringIO(cdata)
+    output_fd = io.StringIO()
     block_end = 0
 
     while in_fd.tell() < len(cdata):
