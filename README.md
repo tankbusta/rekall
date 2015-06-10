@@ -44,6 +44,9 @@ Rekall makes a major stable release):
 To have all the dependencies installed. You still need to have python and pip
 installed first.
 
+If you want to use any plugins that use distorm3 and your using python3, you must
+install a python3 compatible fork located [here](https://github.com/fitzgibbon/distorm3-python3)
+
 If you want to use the yarascan plugin, install [yara and
 yara-python](http://plusvic.github.io/yara/).
 

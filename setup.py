@@ -37,11 +37,29 @@ from rekall import constants
 
 rekall_description = "Rekall Memory Forensic Framework"
 
+PY3 = sys.version_info[0] == 3
+
+REQUIRES = ["argparse >= 0.9", "PyYAML >= 2.10", "pytz >= 2012",
+            "intervaltree >= 2.0.4", "ipython >= 3.0.0",
+            "pycrypto >= 2.3.1", "pyelftools >= 0.22",
+            "acora >= 1.8", "codegen >= 1.0", "Flask >= 0.10.1",
+            "Flask-Sockets >= 0", "gevent >= 1.0.1",
+            "gevent-websocket >= 0.9.3", "PyAFF4 >= 0.13",
+            ]
+
+# pyaff4 needs some py3 love and we need a special distorm3 fork
+if not PY3:
+    REQUIRES.append("PyAFF4 >= 0.13")
+    REQUIRES.append("distorm3 >= 0")
+
+with open("README.rst") as fd:
+    LD = fd.read()
+
 setup(
     name="rekall",
     version=constants.VERSION,
     description=rekall_description,
-    long_description=open("README.rst").read(),
+    long_description=LD,
     license="GPL",
     url="https://www.rekall-forensic.com/",
     author="The Rekall team",
@@ -56,29 +74,11 @@ setup(
     package_dir={'rekall': 'rekall'},
     packages=find_packages('.'),
     include_package_data=True,
-
     entry_points={
         "console_scripts": [
             "rekal = rekall.rekal:main",
             "rekall = rekall.rekal:main",
         ]
     },
-
-    install_requires=[
-        "argparse >= 0.9",
-        "PyYAML >= 2.10",
-        "pytz >= 2012",
-        "intervaltree >= 2.0.4",
-        "ipython >= 3.0.0",
-        "pycrypto >= 2.3.1",
-        "pyelftools >= 0.22",
-        "distorm3 >= 0",
-        "acora >= 1.8",
-        "codegen >= 1.0",
-        "Flask >= 0.10.1",
-        "Flask-Sockets >= 0",
-        "gevent >= 1.0.1",
-        "gevent-websocket >= 0.9.3",
-        "PyAFF4 >= 0.13",
-        ],
+    install_requires=REQUIRES,
 )
