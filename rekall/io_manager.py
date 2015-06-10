@@ -35,13 +35,20 @@ existing files.
 
 __author__ = "Michael Cohen <scudette@google.com>"
 
-import io
+try:
+    from StringIO import StringIO
+    import urllib2
+    import urlparse
+except ImportError: # python 3
+    from io import StringIO
+    import urllib.request as urllib2
+    import urllib.parse as urlparse
+
+
 import gzip
 import json
 import time
 import os
-import urllib2
-import urlparse
 import zipfile
 
 from rekall import constants
@@ -376,11 +383,11 @@ class DirectoryIOManager(IOManager):
 
 # pylint: disable=protected-access
 
-class SelfClosingFile(io.StringIO):
+class SelfClosingFile(StringIO):
     def __init__(self, name, manager):
         self.name = name
         self.manager = manager
-        io.StringIO.__init__(self)
+        StringIO.__init__(self)
 
     def __enter__(self):
         return self
@@ -535,7 +542,7 @@ class URLManager(IOManager):
             fd = urllib2.urlopen(url + ".gz", timeout=10)
             self.session.logging.debug("Opened url %s.gz" % url)
             return gzip.GzipFile(
-                fileobj=io.StringIO(fd.read(MAX_DATA_SIZE)))
+                fileobj=StringIO(fd.read(MAX_DATA_SIZE)))
         except urllib2.HTTPError:
             # Try to load the file without the .gz extension.
             self.session.logging.debug("Opened url %s" % url)

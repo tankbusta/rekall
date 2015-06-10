@@ -22,7 +22,10 @@
 __author__ = "Michael Cohen <scudette@gmail.com>"
 
 
-import io
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 from rekall import config
 from rekall import obj
@@ -123,7 +126,7 @@ class Command(object):
 
     def __str__(self):
         """Render into a string using the text renderer."""
-        fd = io.StringIO()
+        fd = StringIO()
         ui_renderer = text_renderer.TextRenderer(
             session=self.session, fd=fd)
 

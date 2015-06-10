@@ -21,6 +21,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 """These are various utilities for rekall."""
+try:
+    import __builtin__
+except ImportError:
+    import builtins as __builtin__
+
 import bisect
 import importlib
 import itertools
@@ -38,6 +43,7 @@ PY3 = sys.version_info[0] == 3
 if PY3:
     STR_TYPES = (str, )
     NUMERIC_TYPES = (int, float)
+
     basestring = (str, bytes)
 
     def iteritems(d, **kwargs):
@@ -928,7 +934,7 @@ def issubclass(obj, cls):    # pylint: disable=redefined-builtin
     Returns:
       True if obj is a subclass of cls and False otherwise.
     """
-    return isinstance(obj, type) and issubclass(obj, cls)
+    return isinstance(obj, type) and __builtin__.issubclass(obj, cls)
 
 
 def XOR(string1, string2):

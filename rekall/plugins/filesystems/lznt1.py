@@ -28,11 +28,13 @@ https://github.com/libyal/reviveit/
 https://github.com/sleuthkit/sleuthkit/blob/develop/tsk/fs/ntfs.c
 """
 import array
-import io
 import logging
 import struct
 
-
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 def get_displacement(offset):
     """Calculate the displacement."""
@@ -62,8 +64,8 @@ def decompress_data(cdata, logger=None):
         lznt1_logger = logger.getChild("lznt1")
     # Change to DEBUG to turn on module level debugging.
     lznt1_logger.setLevel(logging.ERROR)
-    in_fd = io.StringIO(cdata)
-    output_fd = io.StringIO()
+    in_fd = StringIO(cdata)
+    output_fd = StringIO()
     block_end = 0
 
     while in_fd.tell() < len(cdata):

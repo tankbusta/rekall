@@ -1,4 +1,7 @@
-import io
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 class Plugin(object):
     ANGULAR_MODULE = None
@@ -12,7 +15,7 @@ class Plugin(object):
 
     @classmethod
     def GenerateHTML(cls, root_url="/"):
-        out = io.StringIO()
+        out = StringIO()
         for js_file in cls.JS_FILES:
             js_file = js_file.lstrip("/")
             out.write('<script src="%s%s"></script>\n' % (root_url, js_file))

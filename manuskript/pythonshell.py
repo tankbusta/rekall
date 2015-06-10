@@ -1,8 +1,11 @@
 import ast
 import codegen
-import io
 import sys
 
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 class Error(Exception):
     """PythonShell-specific error."""
@@ -48,8 +51,8 @@ class PythonShell(object):
                 TypeError, MemoryError) as e:
             raise ParseError(e)
 
-        stdout = io.StringIO()
-        stderr = io.StringIO()
+        stdout = StringIO()
+        stderr = StringIO()
         prev_stdout = sys.stdout
         prev_stderr = sys.stderr
         sys.stdout = stdout

@@ -86,8 +86,12 @@ import gzip
 import json
 import os
 import re
-import io
 import yaml
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 from rekall import io_manager
 from rekall import plugin
@@ -240,7 +244,7 @@ class LinuxConverter(ProfileConverter):
             if ko_file:
                 self.session.logging.info(
                   "Converting Linux profile with ko module.")
-                parser = dwarfparser.DWARFParser(io.StringIO(ko_file),
+                parser = dwarfparser.DWARFParser(StringIO(ko_file),
                                                  session=self.session)
 
                 profile_file = self.BuildProfile(system_map, parser.VType(),
