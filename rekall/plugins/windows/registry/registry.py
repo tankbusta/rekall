@@ -543,7 +543,7 @@ class Registry(object):
            key: A string path to the key (separated with / or \\) or a list of
               path components (useful if the keyname contains /).
         """
-        if isinstance(key, basestring):
+        if isinstance(key, utils.basestring):
             # / can be part of the key name...
             key = filter(None, re.split(r"[\\/]", key))
 

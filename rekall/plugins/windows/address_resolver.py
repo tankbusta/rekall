@@ -306,7 +306,7 @@ class WindowsAddressResolver(address_resolver.AddressResolverMixin,
 
     def LoadProfileForName(self, name):
         """Returns the profile responsible for the symbol name."""
-        if not isinstance(name, basestring):
+        if not isinstance(name, utils.basestring):
             raise TypeError("Name should be a string.")
 
         self._EnsureInitialized()

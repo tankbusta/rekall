@@ -270,7 +270,7 @@ class Configuration(Cache):
         return profile
 
     def _set_logging(self, level, _):
-        if isinstance(level, basestring):
+        if isinstance(level, utils.basestring):
             level = getattr(logging, level.upper(), logging.INFO)
 
         if level == None:
@@ -639,7 +639,7 @@ class Session(object):
 
     def _GetPluginName(self, plugin_obj):
         """Extract the name from the plugin object."""
-        if isinstance(plugin_obj, basestring):
+        if isinstance(plugin_obj, utils.basestring):
             return plugin_obj
 
         elif utils.issubclass(plugin_obj, plugin.Command):
@@ -649,7 +649,7 @@ class Session(object):
             return plugin_obj.name
 
     def _GetPluginObj(self, plugin_obj, *pos_args, **kwargs):
-        if isinstance(plugin_obj, basestring):
+        if isinstance(plugin_obj, utils.basestring):
             plugin_name = plugin_obj
 
         elif utils.issubclass(plugin_obj, plugin.Command):
@@ -664,7 +664,7 @@ class Session(object):
                 "First parameter should be a plugin name or instance.")
 
         # When passed as a string this specifies a plugin name.
-        if isinstance(plugin_obj, basestring):
+        if isinstance(plugin_obj, utils.basestring):
             plugin_cls = getattr(self.plugins, plugin_obj, None)
             if plugin_cls is None:
                 self.logging.error(
@@ -822,7 +822,7 @@ class Session(object):
         We instantiate the renderer specified in self.GetParameter("format").
         """
         ui_renderer = self.GetParameter("format", "text")
-        if isinstance(ui_renderer, basestring):
+        if isinstance(ui_renderer, utils.basestring):
             ui_renderer_cls = renderer.BaseRenderer.ImplementationByName(
                 ui_renderer)
             ui_renderer = ui_renderer_cls(session=self)
@@ -841,7 +841,7 @@ class Session(object):
         if value == None:
             self.state.cache.Set('profile_obj', value)
 
-        elif isinstance(value, basestring):
+        elif isinstance(value, utils.basestring):
             with self.state:
                 self.state.Set('profile', value)
 

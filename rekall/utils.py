@@ -21,7 +21,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 """These are various utilities for rekall."""
-import __builtin__
 import bisect
 import importlib
 import itertools
@@ -32,11 +31,30 @@ import socket
 import tempfile
 import threading
 import time
+import sys
+
+PY3 = sys.version_info[0] == 3
+
+if PY3:
+    STR_TYPES = (str, )
+    NUMERIC_TYPES = (int, float)
+    basestring = (str, bytes)
+
+    def iteritems(d, **kwargs):
+        return iter(d.items(**kwargs))
+
+else:
+    STR_TYPES = (unicode, str)
+    NUMERIC_TYPES = (int, float, long)
+    basestring = basestring
+
+    def iteritems(d, **kwargs):
+        return d.iteritems(**kargs)
 
 
 def SmartStr(string, encoding="utf8"):
     """Forces the string to be an encoded byte string."""
-    if type(string) == unicode:
+    if isinstance(string, STR_TYPES):
         return string.encode("utf8", "ignore")
 
     try:
@@ -910,7 +928,7 @@ def issubclass(obj, cls):    # pylint: disable=redefined-builtin
     Returns:
       True if obj is a subclass of cls and False otherwise.
     """
-    return isinstance(obj, type) and __builtin__.issubclass(obj, cls)
+    return isinstance(obj, type) and issubclass(obj, cls)
 
 
 def XOR(string1, string2):

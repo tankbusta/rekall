@@ -268,7 +268,7 @@ exit 0
                 merged_config = defaults.copy()
                 merged_config.update(test_config)
 
-                if isinstance(v, basestring):
+                if isinstance(v, utils.basestring):
                     v = v % merged_config
                     test_config[k] = v
 

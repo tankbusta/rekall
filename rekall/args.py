@@ -38,7 +38,6 @@ from rekall import constants
 from rekall import plugin
 from rekall import utils
 
-
 config.DeclareOption("--plugin", default=[], type="ArrayStringParser",
                      help="Load user provided plugin bundle.")
 
@@ -465,7 +464,7 @@ class IntParser(argparse.Action):
         return value
 
     def __call__(self, parser, namespace, values, option_string=None):
-        if isinstance(values, basestring):
+        if isinstance(values, utils.basestring):
             values = self.parse_int(values)
         setattr(namespace, self.dest, values)
 
@@ -487,7 +486,7 @@ class ArrayIntParser(IntParser):
 
     def __call__(self, parser, namespace, values, option_string=None):
         result = []
-        if isinstance(values, basestring):
+        if isinstance(values, utils.basestring):
             values = [values]
 
         for value in values:
@@ -500,7 +499,7 @@ class ArrayStringParser(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         result = []
 
-        if isinstance(values, basestring):
+        if isinstance(values, utils.basestring):
             values = [values]
 
         for value in values:

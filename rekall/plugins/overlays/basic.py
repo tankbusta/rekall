@@ -251,7 +251,7 @@ class Flags(obj.NativeType):
         return "%s (%s)" % (super(Flags, self).__repr__(), ", ".join(flags))
 
     def write(self, data):
-        if isinstance(data, basestring):
+        if isinstance(data, utils.basestring):
             value = 0
             for item in data.split("|"):
                 item = item.strip()
@@ -822,7 +822,7 @@ class Function(obj.BaseAddressComparisonMixIn, obj.BaseObject):
 
         terms = []
         for e in expressions:
-            if isinstance(e, basestring):
+            if isinstance(e, utils.basestring):
                 e = re.compile(e)
             terms.append(e)
 

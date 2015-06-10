@@ -758,7 +758,7 @@ class Pointer(NativeType):
                                vm=vm, profile=self.obj_profile,
                                parent=self.obj_parent, name=self.obj_name))
 
-            if isinstance(self.target, basestring):
+            if isinstance(self.target, utils.basestring):
                 result = self.obj_profile.Object(
                     type_name=self.target,
                     context=self.obj_context, **kwargs)
@@ -2015,7 +2015,7 @@ class Profile(object):
             return overlay
 
         # A base string means its an alias of another type.
-        if isinstance(overlay, basestring):
+        if isinstance(overlay, utils.basestring):
             return overlay
 
         # Check the overlay and type descriptor for sanity.

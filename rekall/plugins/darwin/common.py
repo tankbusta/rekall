@@ -507,7 +507,7 @@ class DarwinProcessFilter(DarwinPlugin):
 
         self.pids = pids
         self.proc_regex_text = proc_regex
-        if isinstance(proc_regex, basestring):
+        if isinstance(proc_regex, utils.basestring):
             proc_regex = re.compile(proc_regex, re.I)
 
         self.proc_regex = proc_regex

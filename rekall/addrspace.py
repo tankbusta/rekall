@@ -438,9 +438,7 @@ class RunBasedAddressSpace(PagedReader):
         # Mapping not valid. We need to pad until the next run.
         if file_offset is None:
             return "\x00" * min(length, available_length)
-
-        else:
-            return self.base.read(file_offset, min(length, available_length))
+        return self.base.read(file_offset, min(length, available_length))
 
     def vtop(self, addr):
         file_offset, _ = self._get_available_buffer(addr, 1)

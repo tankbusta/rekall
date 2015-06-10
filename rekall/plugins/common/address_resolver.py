@@ -24,7 +24,7 @@ import re
 
 from rekall import config
 from rekall import obj
-
+from rekall import utils
 
 config.DeclareOption(
     "--name_resolution_strategies", default=["Module", "Symbol", "Export"],
@@ -144,7 +144,7 @@ class AddressResolverMixin(object):
         except (ValueError, TypeError):
             pass
 
-        if not isinstance(name, basestring):
+        if not isinstance(name, utils.basestring):
             raise TypeError("Name should be a string.")
 
         components = self._ParseAddress(name)

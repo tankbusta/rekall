@@ -643,7 +643,7 @@ class JoinedCell(BaseCell):
             elif isinstance(cell, BaseCell):
                 self.cells.append(cell)
 
-            elif not isinstance(cell, basestring):
+            elif not isinstance(cell, utils.basestring):
                 raise RuntimeError(
                     "Something went wrong! Cell should be a string.")
 
@@ -864,14 +864,14 @@ class Cell(BaseCell):
             if offset <= start <= limit + adjust:
                 escape_seq = ""
                 if fg is not None:
-                    if isinstance(fg, basestring):
+                    if isinstance(fg, utils.basestring):
                         fg = self.colorizer.COLOR_MAP[fg]
 
                     escape_seq += self.colorizer.tparm(
                         ["setaf", "setf"], fg)
 
                 if bg is not None:
-                    if isinstance(bg, basestring):
+                    if isinstance(bg, utils.basestring):
                         bg = self.colorizer.COLOR_MAP[bg]
 
                     escape_seq += self.colorizer.tparm(

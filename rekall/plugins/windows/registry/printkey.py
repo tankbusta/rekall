@@ -124,7 +124,7 @@ class PrintKey(registry.RegistryPlugin):
                     renderer.format("{0:addrpad} ", value.obj_vm.vtop(value))
                     if value.Type == 'REG_BINARY':
                         data = value.DecodedData
-                        if isinstance(data, basestring):
+                        if isinstance(data, utils.basestring):
                             renderer.format(
                                 u"{0:width=13} {1:width=15} : {2}\n",
                                 value.Type, value.Name, self.voltext(value))

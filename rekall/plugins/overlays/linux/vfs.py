@@ -35,7 +35,7 @@ class File(object):
 
     def __init__(self, filename=None, mountpoint=None, dentry=None,
                  is_root=False, session=None):
-        if isinstance(filename, (basestring, basic.String)):
+        if isinstance(filename, (utils.basestring, basic.String)):
             self.filename = utils.SmartUnicode(filename).split("/")
         elif isinstance(filename, list):
             self.filename = filename
