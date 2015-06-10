@@ -832,7 +832,7 @@ class Function(obj.BaseAddressComparisonMixIn, obj.BaseObject):
 
         for i in xrange(len(instructions)):
             for j in xrange(len(terms)):
-                print expressions[j], instructions[i][1]
+                print(expressions[j], instructions[i][1])
                 if not terms[j].match(instructions[i + j][1]):
                     break
             else:

@@ -269,7 +269,7 @@ pe_overlays = {
                 'IMAGE_SCN_MEM_SHARED':                0x10000000,
                 'IMAGE_SCN_MEM_EXECUTE':               0x20000000,
                 'IMAGE_SCN_MEM_READ':                  0x40000000,
-                'IMAGE_SCN_MEM_WRITE':                 0x80000000L},
+                'IMAGE_SCN_MEM_WRITE':                 0x80000000},
             'target': 'unsigned long'}]],
         }],
 

@@ -785,7 +785,7 @@ class BuildProfileLocally(plugin.Command):
                     "profile repository.", profile_name)
 
                 return repository.StoreData(profile_name, data)
-            except IOError, e:
+            except IOError as e:
                 self.session.logging.error("Error: %s", e)
 
         raise IOError("Profile not found")

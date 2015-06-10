@@ -62,7 +62,7 @@ def main(argv=None):
         if getattr(flags, "run", None):
             # Export the session object to the external script.
             user_session.locals["session"] = user_session
-            exec open(flags.run) in user_session.locals
+            exec(open(flags.run) in user_session.locals)
 
     try:
         # Run the plugin with plugin specific args.
