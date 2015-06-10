@@ -49,7 +49,7 @@ class polymorphic(object):
     Examples:
         @polymorphic
         def say_moo(bovine):
-            raise NotImplementedError()
+            raise NotImplementedError
 
         class Cow():
             pass

@@ -7,13 +7,13 @@ from efilter import protocol
 @dispatch.polymorphic
 def say_moo(cow):
     _ = cow
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def graze(cow):
     _ = cow
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IBovine(protocol.Protocol):

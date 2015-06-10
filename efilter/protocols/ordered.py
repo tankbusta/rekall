@@ -27,11 +27,11 @@ from efilter import protocol
 
 @dispatch.polymorphic
 def compare(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IOrdered(protocol.Protocol):
-    _protocol_functions = (compare,)
+    _protocol_functions = (compare, )
 
 
 # Default implementations:
@@ -39,6 +39,6 @@ class IOrdered(protocol.Protocol):
 IOrdered.implement(
     for_type=protocol.AnyType,
     implementations={
-        compare: cmp
+        compare: lambda a, b: (a > b) - (a < b)
     }
 )

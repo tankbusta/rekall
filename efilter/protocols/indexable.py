@@ -49,7 +49,7 @@ def indices(x):
 
     See ext.indexset for more details about how indices may be used.
     """
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IIndexable(protocol.Protocol):

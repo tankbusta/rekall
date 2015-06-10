@@ -29,17 +29,17 @@ from efilter.protocols import counted
 
 @dispatch.polymorphic
 def select(associative, key):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def resolve(associative, key):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def getkeys(associative):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IAssociative(protocol.Protocol):

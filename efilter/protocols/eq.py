@@ -27,12 +27,12 @@ from efilter import protocol
 
 @dispatch.polymorphic
 def eq(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def ne(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IEq(protocol.Protocol):

@@ -28,22 +28,22 @@ from efilter import protocol
 
 @dispatch.polymorphic
 def sum(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def product(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def difference(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def quotient(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class INumber(protocol.Protocol):

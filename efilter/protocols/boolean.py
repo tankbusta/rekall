@@ -27,7 +27,7 @@ from efilter import protocol
 
 @dispatch.polymorphic
 def asbool(x):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IBoolean(protocol.Protocol):

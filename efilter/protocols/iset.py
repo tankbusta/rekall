@@ -29,22 +29,22 @@ from efilter.protocols import eq
 
 @dispatch.polymorphic
 def union(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def intersection(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def difference(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def issuperset(x, y):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
@@ -64,7 +64,7 @@ def isstrictsubset(x, y):
 
 @dispatch.polymorphic
 def contains(s, e):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class ISet(protocol.Protocol):

@@ -39,7 +39,7 @@ from efilter.protocols import eq
 @dispatch.polymorphic
 def superposition(first_state, *states):
     """Build a superposition of states, all of which must be the same type."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 def meld(*states):
@@ -71,7 +71,7 @@ def meld(*states):
 @dispatch.polymorphic
 def getstates(x):
     """Return a collection of the possible states of x."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 def getstate(x):
@@ -88,25 +88,25 @@ def getstate(x):
 @dispatch.polymorphic
 def state_type(x):
     """Return the type (class) of the states of x."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def state_union(x, y):
     """Return a new superposition with the union of states."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def state_intersection(x, y):
     """Return a new superposition with the intersection of states."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def state_difference(x, y):
     """Return a new superposition with the difference of states of x and y."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
@@ -117,19 +117,19 @@ def hasstate(sp, state):
     False. (Use state_superset for comparing two superpositions in a similar
     fashion.)
     """
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def state_eq(x, y):
     """Are the states of x and y exactly the same?"""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
 def state_superset(x, y):
     """Are the states of x a superset of the states of y?"""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
@@ -153,7 +153,7 @@ def state_strictsubset(x, y):
 @dispatch.polymorphic
 def state_apply(x, f):
     """Apply f to each state of x and return a new superposition of results."""
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic

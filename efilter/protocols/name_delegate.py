@@ -69,7 +69,7 @@ def reflect(delegate, name, scope=None):
         reflect(delegate, "p_pid", proc) #=> unsigned
         reflect(delegate, "void_pointer", proc) #=> AnyType
     """
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
@@ -89,7 +89,7 @@ def asglobal(delegate, name, scope=None):
         asglobal(delegate, "name", Process) #=> None
         asglobal(delegate, "Process", )
     """
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
@@ -100,7 +100,7 @@ def provide(delegate, name):
         # Global constant:
         provide(delegate, "_PsListHead") #=> <struct pslisthead @0xffff503ac...
     """
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 @dispatch.polymorphic
@@ -109,7 +109,7 @@ def getnames(delegate):
 
     Returns an iterable of strings.
     """
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class INameDelegate(protocol.Protocol):

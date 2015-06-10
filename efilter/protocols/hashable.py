@@ -30,7 +30,7 @@ from efilter import protocol
 
 @dispatch.polymorphic
 def hashed(x):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class IHashable(protocol.Protocol):

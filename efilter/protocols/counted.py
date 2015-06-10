@@ -27,7 +27,7 @@ from efilter import protocol
 
 @dispatch.polymorphic
 def count(coll):
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 class ICounted(protocol.Protocol):
