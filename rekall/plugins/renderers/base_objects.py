@@ -45,7 +45,6 @@ class StringTextRenderer(BaseObjectTextRenderer):
     renders_type = "String"
 
     def render_full(self, target, **_):
-        print(type(utils.SmartUnicode(target)))
         data = utils.SmartUnicode(target).split("\x00")[0]
         return text.Cell(
             data or u"")

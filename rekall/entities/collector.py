@@ -28,6 +28,7 @@ from rekall import registry
 
 from rekall.entities.query import analyzer
 from efilter import query as entity_query
+from rekall.compat import with_metaclass, iteritems
 
 
 class CostEnum(object):
@@ -47,7 +48,7 @@ class EffectEnum(object):
     Duplicate = 3  # No new data.
 
 
-class EntityCollector(object):
+class EntityCollector(with_metaclass(registry.MetaclassRegistry)):
     """Base class for entity collectors.
 
     EntityCollector subclasses need to override the 'collect' method and the
@@ -123,7 +124,6 @@ class EntityCollector(object):
     filter_input = False
     complete_input = False
 
-    __metaclass__ = registry.MetaclassRegistry
     __abstract = True
 
     DELIMITER = re.compile(r"[\/=]")
@@ -160,7 +160,7 @@ class EntityCollector(object):
         if self.collect_queries or self.collect_args is None:
             return
 
-        for arg, source in self.collect_args.iteritems():
+        for arg, source in iteritems(self.collect_args):
             self.collect_queries[arg] = entity_query.Query(source)
 
     @property

@@ -103,12 +103,12 @@ from rekall.plugins import core
 from rekall.plugins.overlays.linux import dwarfdump
 from rekall.plugins.overlays.linux import dwarfparser
 from rekall.plugins.windows import common
+from rekall.compat import with_metaclass
 
 
-class ProfileConverter(object):
+class ProfileConverter(with_metaclass(registry.MetaclassRegistry)):
     """Base class for converters."""
 
-    __metaclass__ = registry.MetaclassRegistry
     __abstract = True
 
     def __init__(self, input, output, profile_class=None, session=None):

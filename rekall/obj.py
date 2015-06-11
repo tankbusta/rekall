@@ -588,10 +588,10 @@ class NativeType(NumericProxyMixIn, BaseObject):
         return self.v()
 
     def __radd__(self, other):
-        return long(other) + self.v()
+        return int(other) + self.v()
 
     def __rsub__(self, other):
-        return long(other) - self.v()
+        return int(other) - self.v()
 
     @property
     def obj_size(self):

@@ -27,6 +27,7 @@ import itertools
 import logging
 import traceback
 
+from rekall.compat import iteritems, itervalues
 from rekall.entities import collector as entity_collector
 from rekall.entities import component as entity_component
 from rekall.entities import entity as entity_module
@@ -63,7 +64,7 @@ class IngestionPipeline(object):
         """Return entities available to satisfy the query."""
         if isinstance(query, dict):
             results = {}
-            for key, value in query.iteritems():
+            for key, value in iteritems(query):
                 results[key] = self.find(value)
             return results
 
@@ -105,7 +106,7 @@ class IngestionPipeline(object):
                     counts[entity_collector.EffectEnum.Enqueued] += 1
                     self.empty = False
 
-        if any(counts.itervalues()):
+        if any(itervalues(counts)):
             logging.debug(
                 "%s results: %d new, %d updated, %d requeued, %d duplicates.",
                 collector.name,
@@ -180,7 +181,7 @@ class EntityManager(object):
 
     def update_collectors(self):
         """Refresh the list of active collectors. Do a diff if possible."""
-        for key, cls in entity_collector.EntityCollector.classes.iteritems():
+        for key, cls in iteritems(entity_collector.EntityCollector.classes):
             if key in self._collectors:
                 if cls.is_active(self.session):
                     continue
@@ -213,7 +214,7 @@ class EntityManager(object):
         """
         # Cast values to their correct types.
         cast_dict = {}
-        for key, val in identity_dict.iteritems():
+        for key, val in iteritems(identity_dict):
             if isinstance(key, tuple):
                 cast_vals = []
                 for idx, attr in enumerate(key):
@@ -297,7 +298,7 @@ class EntityManager(object):
         for index in indices:
             self.entities[index] = entity
 
-        for lookup_table in self.lookup_tables.itervalues():
+        for lookup_table in itervalues(self.lookup_tables):
             lookup_table.update_index((entity,))
 
         return entity, effect
@@ -392,10 +393,10 @@ class EntityManager(object):
             - name of the keyword argument on the collect method under which
               the entity should be passed to the collector.
         """
-        for collector in self.collectors.itervalues():
+        for collector in itervalues(self.collectors):
             if len(collector.collect_queries) != 1:
                 continue
-            for query_name, query in collector.collect_queries.iteritems():
+            for query_name, query in iteritems(collector.collect_queries):
                 matcher = self.matcher_for(query)
                 if matcher.run(entity):
                     yield collector, query_name
@@ -437,10 +438,7 @@ class EntityManager(object):
         analysis = self._cached_query_analyses.get(cache_key, None)
         if analysis:
             # We want to make a copy exactly one level deep.
-            analysis_copy = {}
-            for key, value in analysis.iteritems():
-                analysis_copy[key] = copy.copy(value)
-            return analysis_copy
+            return {k: copy.copy(v) for (k, v) in iteritems(analysis)}
 
         analyzer = wanted.run_engine("slashy_analyzer")
         include = analyzer.include
@@ -450,7 +448,7 @@ class EntityManager(object):
         # A collector is a match if any of its promises match any of the
         # dependencies of the query.
         matched_collectors = []
-        for collector in self.collectors.itervalues():
+        for collector in itervalues(self.collectors):
             for promise, dependency in itertools.product(
                     collector.promises, include):
                 if dependency.match(promise):
@@ -542,7 +540,7 @@ class EntityManager(object):
 
         if isinstance(query, dict):
             results = {}
-            for query_name, expr in query.iteritems():
+            for query_name, expr in iteritems(query):
                 results[query_name] = self.find(expr, complete=complete,
                                                 validate=validate,
                                                 query_params=query_params,
@@ -656,12 +654,12 @@ class EntityManager(object):
                 logging.debug("Collector %s deferred until stage 2.",
                               collector.name)
                 repeated.append(collector)
-                queries |= set(collector.collect_queries.itervalues())
+                queries |= set(itervalues(collector.collect_queries))
 
                 # Discard the indexing suggestions for ingestion queries
                 # because they don't represent normal usage.
                 additional = set()
-                for query in collector.collect_queries.itervalues():
+                for query in itervalues(collector.collect_queries):
                     additional |= set(self.analyze(query)["collectors"])
 
                 for dependency in additional:
@@ -750,7 +748,7 @@ class EntityManager(object):
                 # The collector requests its prefilter to be called.
                 if collector.filter_input:
                     collector_input_filtered = {}
-                    for key, val in collector_input.iteritems():
+                    for key, val in iteritems(collector_input):
                         collector_input_filtered[key] = collector.input_filter(
                             hint=hint, entities=val)
                     collector_input = collector_input_filtered

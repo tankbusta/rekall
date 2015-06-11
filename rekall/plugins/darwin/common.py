@@ -28,7 +28,7 @@ from rekall import plugin
 from rekall import scan
 from rekall import utils
 
-from rekall.compat import basestring
+from rekall.compat import basestring, NUMERIC_TYPES
 
 from rekall.plugins import core
 
@@ -482,12 +482,12 @@ class DarwinProcessFilter(DarwinPlugin):
 
         self.methods = method or self.METHODS
 
-        if isinstance(phys_proc, (int, long)):
+        if isinstance(phys_proc, NUMERIC_TYPES):
             phys_proc = [phys_proc]
         elif phys_proc is None:
             phys_proc = []
 
-        if isinstance(proc, (int, long)):
+        if isinstance(proc, NUMERIC_TYPES):
             proc = [proc]
         elif isinstance(proc, obj.Struct):
             proc = [proc.obj_offset]
@@ -501,7 +501,7 @@ class DarwinProcessFilter(DarwinPlugin):
         if isinstance(pid, list):
             pids.extend(pid)
 
-        elif isinstance(pid, (int, long)):
+        elif isinstance(pid, NUMERIC_TYPES):
             pids.append(pid)
 
         if self.session.pid and not pid:

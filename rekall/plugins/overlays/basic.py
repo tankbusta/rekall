@@ -35,7 +35,8 @@ from rekall import config
 from rekall import obj
 from rekall import utils
 from rekall.plugins.overlays import native_types
-from rekall.compat import basestring, xrange, UNICODE_TYPES
+from rekall.compat import (basestring, xrange, UNICODE_TYPES, 
+                           NUMERIC_TYPES, iteritems)
 
 config.DeclareOption(
     "--timezone", default="UTC", group="Interface",
@@ -184,13 +185,16 @@ class UnicodeString(String):
         return data
 
     def proxied(self):
-        return unicode(self)
+        return str(self)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.v().split("\x00")[0] or u""
 
+    def __unicode__(self):
+        return unicode(str(self))
+
     def __len__(self):
-        return len(unicode(self))
+        return len(str(self))
 
     def __repr__(self):
         value = utils.SmartStr(self)
@@ -319,7 +323,7 @@ class Enumeration(obj.NativeType):
 
         # Due to the way JSON serializes dicts, we must always operate on the
         # choices dict with string keys.
-        self.choices = dict((str(k), v) for k, v in choices.iteritems())
+        self.choices = dict((str(k), v) for k, v in iteritems(choices))
         self.default = default
         if callable(value):
             value = value(self.obj_parent)
@@ -367,11 +371,11 @@ class Enumeration(obj.NativeType):
             u"UNKNOWN (%s)" % utils.SmartUnicode(value))
 
     def __eq__(self, other):
-        if isinstance(other, (int, long)):
+        if isinstance(other, NUMERIC_TYPES):
             return str(self.v()) == str(other)
 
         # Search the choices.
-        for k, v in self.choices.iteritems():
+        for k, v in iteritems(self.choices):
             if v == other:
                 return str(self.v()) == k
 
@@ -657,7 +661,7 @@ class IndexedArray(obj.Array):
 
     def __getitem__(self, item):
         # Still support numeric indexes
-        if isinstance(item, (int, long)):
+        if isinstance(item, NUMERIC_TYPES):
             index = item
 
             # Try to name the object appropriately.

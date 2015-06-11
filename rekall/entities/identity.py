@@ -22,6 +22,7 @@ The Rekall Entity Layer.
 """
 __author__ = "Adam Sindelar <adamsh@google.com>"
 
+from rekall.compat import iteritems
 
 from efilter import expression
 
@@ -49,7 +50,7 @@ class Identity(object):
     @classmethod
     def from_dict(cls, global_prefix, identity_dict):
         indices = []
-        for key, val in identity_dict.iteritems():
+        for key, val in iteritems(identity_dict):
             if val == None:
                 raise IdentityError(
                     "Identity index value for %s cannot be None." % key)

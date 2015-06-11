@@ -29,7 +29,7 @@ import operator
 
 from rekall import registry
 from rekall.entities import types
-from rekall.compat import with_metaclass
+from rekall.compat import with_metaclass, iteritems
 
 from efilter.protocols import superposition
 
@@ -232,7 +232,7 @@ class Component(with_metaclass(registry.MetaclassRegistry)):
 
     def __repr__(self):
         pairs = []
-        for key, val in self.asdict().iteritems():
+        for key, val in iteritems(self.asdict()):
             pairs.append("%s=%s" % (key, repr(val)))
 
         return "%s(%s)" % (self.component_name, ",\n\t".join(pairs))

@@ -30,6 +30,7 @@ from rekall import obj
 from rekall.entities import component as entity_component
 from rekall.entities import identity
 from rekall.entities import types
+from rekall.compat import xrange
 
 from efilter import query
 
@@ -188,7 +189,7 @@ class Entity(object):
 
         if name:
             try:
-                return unicode(name)
+                return str(name)
             except UnicodeDecodeError:
                 logging.warning(
                     "Could not decode Named/name '%s' as unicode.",
@@ -205,11 +206,11 @@ class Entity(object):
                 # everything just uses renderers all the time.
                 val = repr(val)
             else:
-                val = unicode(val)
+                val = str(val)
 
             return "%s: %s" % (key, val)
 
-        return unicode(name)
+        return str(name)
 
     @property
     def kind(self):
@@ -217,7 +218,7 @@ class Entity(object):
         if kind == None:
             kind = "Entity"
 
-        return unicode(kind)
+        return str(kind)
 
     def __repr__(self):
         parts = []
@@ -230,7 +231,7 @@ class Entity(object):
         return "Entity(\n%s)" % ",\n\n".join(parts)
 
     def __str__(self):
-        return self.__unicode__()
+        return "%s: %s" % (self.kind, self.name)
 
     def __unicode__(self):
         return u"%s: %s" % (self.kind, self.name)

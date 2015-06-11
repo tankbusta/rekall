@@ -91,7 +91,9 @@ class Query(object):
             application_delegate=self.application_delegate).run(**kwargs)
 
     def __str__(self):
-        return unicode(self)
+        if self.source:
+            return self.source
+        return self.root
 
     def __unicode__(self):
         if self.source:

@@ -188,7 +188,7 @@ class Pager(object):
         if self.fd is not None:
             # Suppress terminal output. Output is buffered in self.fd and will
             # be sent to the pager.
-            self.fd.write(data)
+            self.fd.write(data.encode(self.encoding, 'ignore'))
 
         # No paging limit specified - just dump to terminal.
         elif self.paging_limit is None:
@@ -205,13 +205,16 @@ class Pager(object):
         # Now create a tempfile and dump the rest of the output there.
         else:
             self.term_fd.write(
-                self.colorizer.Render(
+                (self.colorizer.Render(
                     "Please wait while the rest is paged...",
-                    foreground="YELLOW") + "\r\n")
+                    foreground="YELLOW") + b"\r\n").decode(self.encoding, 'ignore'))
             self.term_fd.flush()
 
             fd = self.GetTempFile()
-            fd.write(self.data + data)
+            d = self.data + data
+            if isinstance(d, str):
+                d = d.encode(self.encoding, 'ignore')
+            fd.write(d)
 
     def isatty(self):
         return self.term_fd.isatty()
@@ -256,7 +259,7 @@ class Pager(object):
 class Colorizer(object):
     """An object which makes its target colorful."""
 
-    COLORS = u"BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE"
+    COLORS = "BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE"
     COLOR_MAP = dict([(x, i) for i, x in enumerate(COLORS.split())])
 
     terminal_capable = False
@@ -811,6 +814,9 @@ class Cell(BaseCell):
     def __init__(self, value="", highlights=None, colorizer=None,
                  padding=0, **kwargs):
         super(Cell, self).__init__(**kwargs)
+        #xxx(cschmitt): how is a bool getting here?????
+        if isinstance(value, bool):
+            value = str(value)
 
         self.paragraphs = value.splitlines()
         self.colorizer = colorizer
@@ -1120,7 +1126,7 @@ class TextTable(renderer_module.BaseTable):
         for line in JoinedCell(tablesep=self.options.get("tablesep"), *cells):
             self.renderer.write(
                 self.renderer.colorizer.Render(
-                    line, foreground=foreground, background=background) + "\n")
+                    line, foreground=foreground, background=background) + b"\n")
 
     def render_header(self):
         """Returns a Cell formed by joining all the column headers."""
