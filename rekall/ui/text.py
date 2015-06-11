@@ -395,7 +395,7 @@ class TextObjectRenderer(with_metaclass(registry.MetaclassRegistry,
         return Cell(repr(target), **options)
 
     def render_full(self, target, **options):
-        return Cell(unicode(target), **options)
+        return Cell(str(target), **options)
 
     def render_address(self, target, width=None, **options):
         return Cell(
@@ -814,9 +814,6 @@ class Cell(BaseCell):
     def __init__(self, value="", highlights=None, colorizer=None,
                  padding=0, **kwargs):
         super(Cell, self).__init__(**kwargs)
-        #xxx(cschmitt): how is a bool getting here?????
-        if isinstance(value, bool):
-            value = str(value)
 
         self.paragraphs = value.splitlines()
         self.colorizer = colorizer

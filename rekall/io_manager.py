@@ -437,9 +437,7 @@ class ZipFileManager(IOManager):
         for zipinfo in self.zip.filelist:
             result[zipinfo.filename] = zipinfo.date_time
 
-        return {
-            "$INVENTORY": result
-        }
+        return {"$INVENTORY": result}
 
     def FlushInventory(self):
         pass

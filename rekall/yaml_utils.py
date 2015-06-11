@@ -1,6 +1,7 @@
 import yaml
 import collections
 
+from rekall.compat import iteritems
 
 class OrderedYamlDict(yaml.YAMLObject, collections.OrderedDict):
     """A class which produces an ordered dict."""
@@ -10,7 +11,7 @@ class OrderedYamlDict(yaml.YAMLObject, collections.OrderedDict):
     def to_yaml(cls, dumper, data):
         value = []
         node = yaml.nodes.MappingNode(cls.yaml_tag, value)
-        for key, item in data.iteritems():
+        for key, item in iteritems(data):
             node_key = dumper.represent_data(key)
             node_value = dumper.represent_data(item)
             value.append((node_key, node_value))

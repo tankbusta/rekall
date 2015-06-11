@@ -31,7 +31,7 @@ from rekall import utils
 
 from rekall.plugins.overlays import basic
 from rekall.plugins.overlays.linux import vfs
-
+from rekall.compat import iteritems
 
 linux_overlay = {
     'task_struct' : [None, {
@@ -971,7 +971,7 @@ class Linux(basic.BasicClasses):
 
     def add_kernel_config_options(self, **kwargs):
         """Add the kwargs as kernel config options for this profile."""
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             self.kernel_config_options[k] = v
 
     def get_kernel_config(self, config_option):

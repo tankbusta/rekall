@@ -33,7 +33,7 @@ __author__ = (
 
 from rekall import obj
 
-from rekall.compat import basestring
+from rekall.compat import basestring, iteritems
 
 class Index(obj.Profile):
     """A profile which contains an index to locate other profiles."""
@@ -116,7 +116,7 @@ class Index(obj.Profile):
         if address_space == None:
             address_space = self.session.GetParameter("default_address_space")
 
-        for profile, symbols in self.index.iteritems():
+        for profile, symbols in iteritems(self.index):
             match = self._TestProfile(
                 address_space=address_space,
                 image_base=image_base,

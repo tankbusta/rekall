@@ -30,7 +30,7 @@ from rekall import obj
 from rekall.entities import component as entity_component
 from rekall.entities import identity
 from rekall.entities import types
-from rekall.compat import xrange
+from rekall.compat import xrange, iteritems
 
 from efilter import query
 
@@ -197,7 +197,7 @@ class Entity(object):
                 name = None
 
         if not name:
-            key = unicode(self.identity.first_index[1])
+            key = str(self.identity.first_index[1])
             val = self.identity.first_index[2]
 
             if isinstance(val, obj.Struct):
@@ -208,8 +208,7 @@ class Entity(object):
             else:
                 val = str(val)
 
-            return "%s: %s" % (key, val)
-
+            return '{}: {}'.format(key, val) 
         return str(name)
 
     @property
@@ -288,13 +287,13 @@ class Entity(object):
         """
         component_dicts = {}
 
-        for attribute, value in attributes.iteritems():
+        for attribute, value in iteritems(attributes):
             component_name, field_name = attribute.split("/", 1)
             component_dicts.setdefault(component_name, {})
             component_dicts[component_name][field_name] = value
 
         components = {}
-        for component_name, kwargs in component_dicts.iteritems():
+        for component_name, kwargs in iteritems(component_dicts):
             component_cls = cls.reflect_component(component_name)
             components[component_name] = component_cls(**kwargs)
 

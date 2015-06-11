@@ -41,6 +41,8 @@ from rekall import utils
 from rekall.plugins.addrspaces import standard
 from rekall.plugins.overlays import basic
 
+from rekall.compat import iteritems
+
 
 class SentinelArray(obj.Array):
     """A sential terminated array."""
@@ -1238,7 +1240,7 @@ class BasicPEProfile(RelativeOffsetMixin, basic.BasicClasses):
         """
         demangler = Demangler(self._metadata)
         result = {}
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             result[demangler.DemangleName(k)] = v
 
         super(BasicPEProfile, self).add_constants(**result)

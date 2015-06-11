@@ -176,11 +176,11 @@ class SignatureScannerCheck(ScannerCheck):
         # Just check the buffer without needing to copy it on slice.
         buffer_offset = buffer_as.get_buffer_offset(offset)
         next_part = self.needles[self.current_needle]
+        print('NEEDLES: ', self.needles)
         if buffer_as.data.startswith(next_part, buffer_offset):
             self.current_needle += 1
             return next_part
-        else:
-            return False
+        return False
 
     def skip(self, buffer_as, offset):
         if self.current_needle >= len(self.needles):
@@ -338,7 +338,7 @@ class BaseScanner(with_metaclass(registry.MetaclassRegistry)):
         """
         maxlen = maxlen or 2**64
         end = offset + maxlen
-        overlap = ""
+        overlap = b''
 
         # Record the last reported hit to prevent multiple reporting of the same
         # hits when using an overlap.
@@ -395,7 +395,7 @@ class BaseScanner(with_metaclass(registry.MetaclassRegistry)):
                 # means there is a gap in the virtual address space and
                 # therefore we should not use any overlap.
                 if chunk_offset != chunk_end:
-                    overlap = ""
+                    overlap = b''
 
                 chunk_offset = max(start, chunk_offset)
 

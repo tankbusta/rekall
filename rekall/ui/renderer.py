@@ -153,7 +153,7 @@ class ObjectRenderer(with_metaclass(registry.MetaclassRegistry)):
             # implementation uses the flat class name to select the
             # ObjectRenderer so we can get duplicates but they dont matter).
             result = tuple(collections.OrderedDict.fromkeys(
-                [x.__name__ for x in item.__mro__]))
+                [str(x.__name__) for x in item.__mro__]))
 
             MRO_CACHE.Put(item, result)
             return result

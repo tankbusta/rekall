@@ -27,6 +27,8 @@ import logging
 from rekall.entities import entity as entity_module
 from rekall.entities import identity as entity_id
 
+from rekall.compat import itervalues
+
 from efilter import engine
 from efilter import expression
 from efilter import query as entity_query
@@ -112,7 +114,7 @@ class EntityQuerySearch(engine.VisitorEngine):
 
     def visit_Equivalence(self, expr):
         if len(expr.children) != 2:
-            return self._slow_solve(expr, self.entities.itervalues())
+            return self._slow_solve(expr, itervalues(self.entities))
 
         x, y = expr.children
         if (isinstance(x, expression.Binding) and
@@ -122,7 +124,7 @@ class EntityQuerySearch(engine.VisitorEngine):
               isinstance(y, expression.Binding)):
             return self._solve_equivalence(expr, y, x)
 
-        return self._slow_solve(expr, self.entities.itervalues())
+        return self._slow_solve(expr, itervalues(self.entities))
 
     def visit_Membership(self, expr):
         collection = self.visit(expr.set)
@@ -130,7 +132,7 @@ class EntityQuerySearch(engine.VisitorEngine):
 
     def visit_Expression(self, expr):
         logging.debug("Fallthrough to filter-based search (%s).", expr)
-        return self._slow_solve(expr, self.entities.itervalues())
+        return self._slow_solve(expr, itervalues(self.entities))
 
     def _slow_Let(self, expr):
         logging.debug("Fallthrough to filter-based search (%s).", expr)

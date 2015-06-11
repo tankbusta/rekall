@@ -87,7 +87,7 @@ class PythonBoolTextRenderer(text.TextObjectRenderer):
     def render_full(self, target, **_):
         color = "GREEN" if target else "RED"
         return text.Cell(
-            value=target,
+            value=str(target),
             highlights=[(0, -1, color, None)])
 
     render_value = render_full

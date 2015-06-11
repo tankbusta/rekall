@@ -123,7 +123,7 @@ class String(obj.StringProxyMixIn, obj.NativeType):
         return (str(self),)
 
     def __getitem__(self, *args):
-        return unicode(self).__getitem__(*args)
+        return str(self).__getitem__(*args)
 
     def __add__(self, other):
         """Set up mappings for concat"""

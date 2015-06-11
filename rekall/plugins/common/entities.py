@@ -26,7 +26,7 @@ from rekall import plugin
 from rekall import testlib
 from rekall import utils
 
-from rekall.compat import basestring
+from rekall.compat import basestring, iteritems
 
 from rekall.entities import entity as entity_module
 from rekall.entities import component as entity_component
@@ -119,7 +119,7 @@ class EntityAnalyze(plugin.ProfileCommand):
                         collectors[additional] = [collector.name]
                         queue.append(additional)
 
-        for collector, reasons in collectors.iteritems():
+        for collector, reasons in iteritems(collectors):
             renderer.table_row(collector.name,
                                self.COLLECTOR_COSTS[collector.run_cost],
                                ", ".join(reasons))

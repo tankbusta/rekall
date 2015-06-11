@@ -18,13 +18,16 @@
 
 __author__ = "Michael Cohen <scudette@gmail.com>"
 
+import sys
+
 from rekall import obj
 from rekall import utils
 
 from rekall.plugins.addrspaces import amd64
 from rekall.plugins.overlays import basic
-from rekall.compat import iterkeys, NUMERIC_TYPES
+from rekall.compat import iterkeys, NUMERIC_TYPES, xrange
 
+PY3 = sys.version_info[0] == 3
 
 darwin_overlay = {
     "proc": [None, {
@@ -1125,7 +1128,8 @@ class proc(obj.Struct):
             if len(result) >= self.p_argc:
                 break
 
-            item = unicode(item)
+            #item = unicode(item)
+            item = str(item)
 
             # The argv array may have null padding for alignment. Discard these
             # empty strings.
@@ -1165,7 +1169,7 @@ class vnode(obj.Struct):
                 return "<Orphan>"
 
         path = "/" + "/".join((str(x) for x in reversed(result) if x))
-        return unicode(path.encode("string-escape"))
+        return str(path.encode("string-escape" if not PY3 else "unicode_escape"))
         # return "/" + "/".join((unicode(x) for x in reversed(result) if x))
 
     @property

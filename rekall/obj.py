@@ -181,7 +181,15 @@ class NoneObject(with_metaclass(registry.MetaclassRegistry)):
         return self
 
     def __str__(self):
-        return self
+        ## If we are strict we blow up here
+        if self.strict:
+            if "%" in self.reason:
+                reason = self.reason % self.args
+            else:
+                reason = self.reason.format(*self.args)
+            logging.error("{0}\n{1}".format(reason, self.bt))
+
+        return "-"
 
     def __unicode__(self):
         ## If we are strict we blow up here
@@ -476,7 +484,10 @@ class BaseObject(with_metaclass(registry.MetaclassRegistry)):
             renderer="TextRenderer", session=self.obj_session)
 
     def __str__(self):
-        return utils.SmartStr(unicode(self))
+        try:
+            return "\n".join(self.get_text_renderer().render_row(self).lines)
+        except Exception as e:
+            return "%s (string conversion raised %s)" % (repr(self), e)
 
     def __unicode__(self):
         try:
@@ -613,6 +624,9 @@ class NativeType(NumericProxyMixIn, BaseObject):
 
     def cdecl(self):
         return self.obj_name
+
+    def __hash__(self):
+        return hash(self.v())
 
     def __repr__(self):
         try:
@@ -772,6 +786,9 @@ class Pointer(NativeType):
 
         return NoneObject("Pointer {0} @ {1} invalid",
                           self.obj_name, self.v())
+
+    def __hash__(self):
+        return hash(self.v())
 
     def __dir__(self):
         return dir(self.dereference())

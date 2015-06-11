@@ -28,7 +28,7 @@ from rekall import plugin
 from rekall import scan
 from rekall import utils
 
-from rekall.compat import basestring, NUMERIC_TYPES
+from rekall.compat import basestring, NUMERIC_TYPES, iteritems
 
 from rekall.plugins import core
 
@@ -105,7 +105,7 @@ class KernelSlideHook(kb.ParameterHook):
 
 class CatfishScanner(scan.BaseScanner):
     checks = [
-        ("StringCheck", dict(needle="Catfish \x00\x00"))
+        ("StringCheck", dict(needle=b"Catfish \x00\x00"))
     ]
 
 
@@ -653,7 +653,7 @@ class DarwinProcessFilter(DarwinPlugin):
         """Uses a few methods to list the procs."""
         seen = set()
 
-        for method, handler in self.METHODS.iteritems():
+        for method, handler in iteritems(self.METHODS):
             if method not in self.methods:
                 continue
 
