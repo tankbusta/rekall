@@ -519,7 +519,7 @@ class _LDR_DATA_TABLE_ENTRY(obj.Struct):
 
     @property
     def name(self):
-        return unicode(self.BaseDllName)
+        return str(self.BaseDllName)
 
     @property
     def base(self):
@@ -565,7 +565,10 @@ class _UNICODE_STRING(obj.Struct):
         return bool(self.Buffer)
 
     def __eq__(self, other):
-        return unicode(self) == utils.SmartUnicode(other)
+        return str(self) == utils.SmartUnicode(other)
+
+    def __str__(self):
+        return self.v().strip("\x00") or ""
 
     def __unicode__(self):
         return self.v().strip("\x00") or u""
@@ -685,7 +688,7 @@ class _EPROCESS(obj.Struct):
 
         for device in object_root["Device"].Object:
             if device.get_object_type() == "Device":
-                device_path = "\\Device\\%s" % unicode(device.NameInfo.Name)
+                device_path = "\\Device\\%s" % str(device.NameInfo.Name)
                 device_cache[device.Object.obj_offset] = device_path
 
     def _BuildDriveNameMapping(self):
@@ -703,9 +706,9 @@ class _EPROCESS(obj.Struct):
         for item in object_root["GLOBAL??"].Object:
             if item.get_object_type() == "SymbolicLink":
                 # Filter by drive names, they always end with a ":"
-                if unicode(item.NameInfo.Name)[-1] == ":":
-                    target_name = unicode(item.Object.LinkTarget)
-                    symbolic_cache[target_name] = unicode(item.NameInfo.Name)
+                if str(item.NameInfo.Name)[-1] == ":":
+                    target_name = str(item.Object.LinkTarget)
+                    symbolic_cache[target_name] = str(item.NameInfo.Name)
 
     def _DriveNameOfDevice(self, device):
         """Get the drive name (i.e: C:) of a device."""
@@ -1169,7 +1172,7 @@ class _FILE_OBJECT(ObjectMixin, obj.Struct):
                 name = u"\\Device\\{0}".format(device_name)
 
         if self.FileName:
-            name += unicode(self.FileName)
+            name += str(self.FileName)
 
         return name
 

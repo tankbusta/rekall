@@ -2288,7 +2288,8 @@ class Profile(with_metaclass(registry.MetaclassRegistry)):
             self.metadata("arch"), self.name, self.__class__.__name__)
 
     def __repr__(self):
-        return unicode(self)
+        return "<%s profile %s (%s)>" % (
+            self.metadata("arch"), self.name, self.__class__.__name__)
 
 
 class TestProfile(Profile):

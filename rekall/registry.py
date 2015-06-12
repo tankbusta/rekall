@@ -79,7 +79,7 @@ class MetaclassRegistry(UniqueObjectIdMetaclass):
                 cls.plugin_feature = base.plugin_feature
                 cls.top_level_class = base.top_level_class
                 break
-            except AttributeError:
+            except AttributeError as ae:
                 cls.classes = {}
                 cls.classes_by_name = {}
                 cls.plugin_feature = cls.__name__
@@ -90,6 +90,7 @@ class MetaclassRegistry(UniqueObjectIdMetaclass):
         # are abstract if the have the __abstract attribute (note this is not
         # inheritable so each abstract class must be explicitely marked).
         abstract_attribute = "_%s__abstract" % name
+
         if getattr(cls, abstract_attribute, None):
             return
 

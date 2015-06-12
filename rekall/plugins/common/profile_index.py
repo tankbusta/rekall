@@ -30,6 +30,7 @@ __author__ = (
     "Michael Cohen <scudette@google.com>",
     "Adam Sindelar <adamsh@google.com>",
 )
+import codecs
 
 from rekall import obj
 
@@ -59,7 +60,7 @@ class Index(obj.Profile):
         Return True if there is a match.
         """
         for value in possible_values:
-            value = value.decode("hex")
+            value = codecs.decode(value, 'hex_codec')
             data = address_space.read(offset, len(value))
             if value == data:
                 return data

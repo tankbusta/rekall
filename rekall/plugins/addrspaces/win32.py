@@ -25,6 +25,7 @@ import struct
 import win32file
 
 from rekall import addrspace
+from rekall.compat import xrange
 
 
 def CTL_CODE(DeviceType, Function, Method, Access):

@@ -107,6 +107,7 @@ class MultiStringFinderCheck(ScannerCheck):
         if buffer_as.base_offset != self.base_offset:
             self.hits = sorted(self.engine.findall(buffer_as.data),
                                key=lambda x: x[1], reverse=True)
+
             self.base_offset = buffer_as.base_offset
 
         data_offset = offset - buffer_as.base_offset

@@ -144,9 +144,9 @@ class WindowsIndexDetector(DetectionMethod):
 
         Since all windows processes also map the kernel we can detect it.
         """
-        return ["cmd.exe\x00\x00", "System\x00\x00", "csrss.exe\x00\x00",
-                "svchost.exe\x00\x00", "lsass.exe\x00\x00",
-                "winlogon.exe\x00\x00"]
+        return [b"cmd.exe\x00\x00", b"System\x00\x00", b"csrss.exe\x00\x00",
+                b"svchost.exe\x00\x00", b"lsass.exe\x00\x00",
+                b"winlogon.exe\x00\x00"]
 
     def Offsets(self):
         return [0]
@@ -280,7 +280,7 @@ class WindowsRSDSDetector(DetectionMethod):
         self.pe_profile = self.session.LoadProfile("pe")
 
     def Keywords(self):
-        return ["RSDS"]
+        return [b"RSDS"]
 
     def VerifyProfile(self, profile_name):
         profile = self.session.LoadProfile(profile_name)
@@ -325,13 +325,13 @@ class LinuxBannerDetector(DetectionMethod):
     name = "linux"
 
     LINUX_TEMPLATE = re.compile(
-        r"Linux version (\d+\.\d+\.\d+[^ ]+)")
+        b"Linux version (\d+\.\d+\.\d+[^ ]+)")
 
     find_dtb_impl = linux_common.LinuxFindDTB
 
     def Keywords(self):
         # The Linux kernels we care about contain this.
-        return ["Linux version "]
+        return [b"Linux version "]
 
     def DetectFromHit(self, hit, offset, address_space):
         guess = address_space.read(offset-100, 300)
@@ -378,12 +378,15 @@ class DarwinIndexDetector(DetectionMethod):
     def Keywords(self):
         # Found in every OS X image. See documentation for DarwinFindKASLR for
         # details.
-        return ["Catfish \x00\x00"]
+        return [b"Catfish \x00\x00"]
 
     def DetectFromHit(self, hit, offset, address_space):
+        import pdb
         for profile_name, match in self.index.LookupIndex(
                 image_base=offset,
                 address_space=self.session.physical_address_space):
+            #pdb.set_trace()
+            #print(profile_name)
             profile = self.VerifyProfile(profile_name)
             if profile:
                 self.session.logging.info(
